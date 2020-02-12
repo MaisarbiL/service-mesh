@@ -1,14 +1,26 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend-v3
-  # labels:
-  #   app: backend
-  #   version: v2
+  annotations:
+    app.openshift.io/vcs-ref: master
+    app.openshift.io/vcs-uri: 'https://gitlab.com/ocp-demo/backend_quarkus.git'
+  labels:
+    app.kubernetes.io/component: backend
+    app.kubernetes.io/instance: backend
+    app.kubernetes.io/name: java
+    app.kubernetes.io/part-of: App-X
+    app.openshift.io/runtime: java
+    app.openshift.io/runtime-version: '8'
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: backend-v3
+      version: v3
   template:
     metadata:
+      creationTimestamp: null
       labels:
         app: backend-v3
         version: v3
@@ -17,18 +29,17 @@ spec:
     spec:
       containers:
       - name: backend
-        image: quay.io/voravitl/backend-js:v3
+        image: quay.io/voravitl/backend-native:v3
         imagePullPolicy: Always
         resources:
           requests:
-            cpu: "0.1"
-            memory: 60Mi
+            cpu: "0.05"
+            memory: 40Mi
           limits:
             cpu: "0.2"
-            memory: 100Mi
+            memory: 120Mi
         env:
-          - name: BACKEND_URL
+          - name: backend
             value: http://localhost:8080/version
-            #value: https://httpbin.org/status/503
         ports:
         - containerPort: 8080
