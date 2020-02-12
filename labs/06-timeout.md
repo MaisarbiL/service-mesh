@@ -13,6 +13,11 @@ oc apply -f ocp/frontend-route.yml -n $USERID
 oc apply -f ocp/backend-v1-deployment.yml -n $USERID
 oc apply -f ocp/backend-v2-deployment.yml -n $USERID
 oc apply -f ocp/backend-service.yml -n $USERID
+watch oc get pods -n $USERID
+# or 
+# oc get pods -w -n $USERID
+# Wait until all backend-v1 pods status are Runnings and all container in pods are ready (2/2)
+
 ```
 
 # Virtual Service

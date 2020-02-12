@@ -13,6 +13,8 @@ Remove backend-v2 and scale backend-v1 to 3 pods.
 oc delete -f ocp/backend-v2-deployment.yml -n $USERID
 oc scale deployment backend-v1 --replicas=3 -n $USERID
 watch oc get pods -n $USERID
+# or 
+# oc get pods -w -n $USERID
 # Wait until all backend-v1 pods status are Runnings and all container in pods are ready (2/2)
 ```
 
@@ -59,16 +61,17 @@ scripts/run-50.sh
 
 Sample output
 ```
-Backend:v1, Response Code: 200, Host:backend-v1-6ddf9c7dcf-x6gkh, Elapsed Time:1.132765 sec
-Backend:v1, Response Code: 504, Host:, Elapsed Time:0.134960 sec
-Backend:v1, Response Code: 200, Host:backend-v1-6ddf9c7dcf-sqxqz, Elapsed Time:1.022941 sec
-Backend:v1, Response Code: 504, Host:, Elapsed Time:0.117325 sec
-Backend:v1, Response Code: 200, Host:backend-v1-6ddf9c7dcf-x6gkh, Elapsed Time:0.787738 sec
-Backend:v1, Response Code: 200, Host:backend-v1-6ddf9c7dcf-sqxqz, Elapsed Time:1.004579 sec
-Backend:v1, Response Code: 504, Host:, Elapsed Time:0.114131 sec
-Backend:v1, Response Code: 200, Host:backend-v1-6ddf9c7dcf-x6gkh, Elapsed Time:0.964214 sec
-Backend:v1, Response Code: 200, Host:backend-v1-6ddf9c7dcf-sqxqz, Elapsed Time:1.043541 sec
-Backend:v1, Response Code: 504, Host:, Elapsed Time:0.122031 sec
+...
+Backend:v1, Response Code: 200, Host:backend-v1-54696877b-z55b6, Elapsed Time:1.225209 sec
+Backend:v1, Response Code: 200, Host:backend-v1-54696877b-gl6kd, Elapsed Time:5.816343 sec
+Backend:v1, Response Code: 504, Host:backend-v1-54696877b-zvlp8, Elapsed Time:0.192307 sec
+Backend:v1, Response Code: 200, Host:backend-v1-54696877b-z55b6, Elapsed Time:3.807361 sec
+Backend:v1, Response Code: 200, Host:backend-v1-54696877b-gl6kd, Elapsed Time:0.850139 sec
+Backend:v1, Response Code: 504, Host:backend-v1-54696877b-zvlp8, Elapsed Time:0.111848 sec
+Backend:v1, Response Code: 200, Host:backend-v1-54696877b-z55b6, Elapsed Time:0.334275 sec
+Backend:v1, Response Code: 200, Host:backend-v1-54696877b-gl6kd, Elapsed Time:0.346220 sec
+Backend:v1, Response Code: 504, Host:backend-v1-54696877b-zvlp8, Elapsed Time:0.114360 sec
+...
 ```
 
 ## Circuit Breaker and Pool Ejection
@@ -98,18 +101,42 @@ trafficPolicy:
 Apply destination rule to enable circuit breaker with pool ejection for backend service
 
 ```
-
+oc apply -f istio-files/virtual-service-backend.yml -n $USERID
 oc apply -f istio-files/destination-rule-backend-circuit-breaker-with-pool-ejection.yml -n $USERID
 ```
 
 Sample output
 
 ```
-destinationrule.networking.istio.io/backend configured
+virtualservice.networking.istio.io/backend-virtual-service created
+destinationrule.networking.istio.io/backend-destination-rule created
 ```
 
 ## Test
+Test with [run50.sh](../scripts/run-50.sh) again and check that you will get 504 only one time. Because that particular pod is ejected from pool and only pods those return 200 OK still stayed in pool.
 
+Sample output
+```
+Backend:v1, Response Code: 504, Host:backend-v1-54696877b-zvlp8, Elapsed Time:0.131285 sec
+Backend:v1, Response Code: 200, Host:backend-v1-54696877b-gl6kd, Elapsed Time:1.036776 sec
+Backend:v1, Response Code: 200, Host:backend-v1-54696877b-z55b6, Elapsed Time:1.079769 sec
+Backend:v1, Response Code: 200, Host:backend-v1-54696877b-gl6kd, Elapsed Time:0.360221 sec
+Backend:v1, Response Code: 200, Host:backend-v1-54696877b-z55b6, Elapsed Time:0.340531 sec
+Backend:v1, Response Code: 200, Host:backend-v1-54696877b-gl6kd, Elapsed Time:0.353228 sec
+Backend:v1, Response Code: 200, Host:backend-v1-54696877b-gl6kd, Elapsed Time:0.407192 sec
+Backend:v1, Response Code: 200, Host:backend-v1-54696877b-z55b6, Elapsed Time:0.407578 sec
+Backend:v1, Response Code: 200, Host:backend-v1-54696877b-gl6kd, Elapsed Time:0.394858 sec
+Backend:v1, Response Code: 200, Host:backend-v1-54696877b-z55b6, Elapsed Time:0.396541 sec
+Backend:v1, Response Code: 200, Host:backend-v1-54696877b-gl6kd, Elapsed Time:0.376350 sec
+Backend:v1, Response Code: 200, Host:backend-v1-54696877b-z55b6, Elapsed Time:0.369998 sec
+Backend:v1, Response Code: 200, Host:backend-v1-54696877b-gl6kd, Elapsed Time:0.339832 sec
+Backend:v1, Response Code: 200, Host:backend-v1-54696877b-gl6kd, Elapsed Time:0.332309 sec
+Backend:v1, Response Code: 200, Host:backend-v1-54696877b-z55b6, Elapsed Time:0.339841 sec
+Backend:v1, Response Code: 200, Host:backend-v1-54696877b-gl6kd, Elapsed Time:0.325807 sec
+Backend:v1, Response Code: 200, Host:backend-v1-54696877b-z55b6, Elapsed Time:0.340239 sec
+Backend:v1, Response Code: 200, Host:backend-v1-54696877b-gl6kd, Elapsed Time:0.308159 sec
+Backend:v1, Response Code: 200, Host:backend-v1-54696877b-gl6kd, Elapsed Time:0.337028 sec
+```
 
 ## Clean Up
 Run oc delete command to remove Istio policy.
@@ -118,7 +145,6 @@ Run oc delete command to remove Istio policy.
 oc delete -f istio-files/destination-rule-backend-circuit-breaker-with-pool-ejection.yml -n $USERID
 oc delete -f istio-files/virtual-service-backend.yml -n $USERID
 ```
-
 <!-- Remove all pods
 ```
 oc delete -f ocp/backend-v1-deployment.yml -n $USERID

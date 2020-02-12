@@ -8,14 +8,14 @@
 oc apply -f ocp/frontend-v1-deployment.yml -n $USERID
 oc apply -f ocp/frontend-service.yml -n $USERID
 oc apply -f ocp/frontend-route.yml -n $USERID
-oc apply -f ocp/backend-v1-service.yml -n $USERID
-oc apply -f ocp/backend-v2-service.yml -n $USERID
+oc apply -f ocp/backend-v1-deployment.yml -n $USERID
+oc apply -f ocp/backend-v2-deployment.yml -n $USERID
 oc apply -f ocp/backend-service.yml -n $USERID
 ```
 
 Create another pod without sidecar for testing
 ```
-oc create -f ocp/station-deployment.yml -n $USERID
+oc apply -f ocp/station-deployment.yml -n $USERID
 ```
 
 Verify that deployment of station
@@ -43,6 +43,9 @@ backend-v2-7655885b8c-rt4jz   2/2     Running   2          3h25m
 frontend-v1-655f4478c-7b5dw   2/2     Running   2          18h
 station-598ffcf464-8tkqg      1/1     Running   0          66s
 ```
+
+You can also check Kiali console that station does not have sidecar
+![station-without-sidecar](../images/station-without-sidecar.png)
 
 Test by using station pod to connect to backend pod
 
@@ -177,7 +180,7 @@ Because backend pod is part of Service Mesh then authentication is sucessed.
 Test with cURL to OpenShift's Router
 
 ```
-curl -v $FRONTEND_URL
+curl $FRONTEND_URL
 ```
 
 You will get following error because OpenShift's router is not part of Service Mesh then router pod cannot authenticate to frontend
@@ -202,4 +205,17 @@ Sample output
 
 ```
 Frontend version: v1 => [Backend: http://backend:8080, Response: 200, Body: Backend version:v2,Response:200,Host:backend-v2-7655885b8c-rt4jz, Message: Hello World!!]
+```
+
+## Clean Up
+Run oc delete command to remove Istio policy.
+
+```
+oc delete -f istio-files/authentication-frontend-enable-mtls.yml -n $USERID
+oc delete -f istio-files/destination-rule-frontend-mtls.yml -n $USERID
+oc delete -f istio-files/virtual-service-frontend.yml -n $USERID
+oc delete -f istio-files/destination-rule-backend-v1-v2-mtls.yml -n $USERID
+oc delete -f istio-files/virtual-service-backend-v1-v2-50-50.yml -n $USERID
+oc delete -f istio-files/authentication-backend-enable-mtls.yml -n $USERID
+oc delete -f istio-files/frontend-gateway.yml -n $USERID
 ```

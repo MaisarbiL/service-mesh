@@ -110,11 +110,11 @@ curl $FRONTEND_URL
 
 Sample outout
 ```
-Frontend version: v1 => [Backend: http://backend:8080, Response: 200, Body: Backend version:v1,Response:200,Host:backend-v1-6ddf9c7dcf-pppzc, Message: Hello World!!]
+Frontend version: v1 => [Backend: http://backend:8080, Response: 200, Body: Backend: 1.0.0, Hostname: backend-v1-7bc7ddd7d8-bk5p6, Status: 200, Message: Hello, World]
 
 # Frontend version v1 call Backend with URL http://backend:8080
 # Response code is 200
-# Backend is version 1.0.0 and respond from pod backend-v1-66f48cff87-gcfxz
+# Backend is version 1.0.0 and respond from pod backend-v1-7bc7ddd7d8-bk5p6
 # Response message from Backend is Hello World!!
 
 ```
