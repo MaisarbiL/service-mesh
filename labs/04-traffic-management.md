@@ -237,7 +237,7 @@ Using Kiali Web Console to view pod's log by select Workloads on left menu then 
 
 ![view pod's log](../images/kiali-view-pod-log.png)
 
-Run cURL to test that every request is sent to backend-v3 by checking log of backend-v3
+Run cURL to test that every request is sent to backend-v3 by checking log of backend-v3 again.
 
 ```
 curl $FRONTEND_URL
@@ -255,6 +255,7 @@ Sample output
 11:27:08 INFO  [co.ex.qu.BackendResource] (executor-thread-2) Return Code: 200
 ...
 ```
+
 
 ## Cleanup
 Run oc delete command to remove Istio policy.

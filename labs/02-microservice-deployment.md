@@ -69,8 +69,10 @@ service/backend created
 Monitor the deployment of the pods:
 ```
 oc get pods -w -n $USERID
-
+# or 
+watch oc get pods -n $USERID
 ```
+
 Wait until the Ready column displays 2/2 pods and the Status column displays Running:
 Press Control-C to exit.
 
@@ -93,11 +95,19 @@ route.route.openshift.io/frontend created
 Monitor the deployment of the pods:
 ```
 watch oc get pods -n $USERID
-or
+# or
 oc get pods -w -n $USERID
 
 ```
 Wait until the Ready column displays 2/2 pods and the Status column displays Running:
+
+### OpenShift Developer Console
+
+Login to OpenShift Web Console. Then select Developer Console
+![Developer Console](../images/developer-console.png)
+
+Both Frontend and Backend app are shown as follow
+![Topology View](../images/topology-view.png)
 
 ### Test
 Test frontend app by
@@ -128,7 +138,7 @@ Verify that backend service selector is set to just app label.
 
 ```
 
-Try to run curl command again and check that response from backend will round-robin between v1 and v2 and v2 is elapsed time is slightly more than 5 sec.
+Try to run cURL command again and check that response from backend will round-robin between v1 and v2 and v2 is elapsed time is slightly more than 5 sec.
 
 
 You also can use following cURL for check response time
