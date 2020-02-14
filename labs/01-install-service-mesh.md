@@ -2,12 +2,19 @@
 
 Use the Red Hat OpenShift Service Mesh operator to deploy a multi-tenant Service Mesh
 
+
 ## Setup
 
 Configure Control Plane including
 
 * Configure Control Plane
 * Configure project(s) or namespace(s) to be part of Service Mesh
+  
+Overall steps including
+* Create project for ControlPlane. Normally named istio-system.
+  Remark: For this lab will be ${USERID}-istio-system
+* Creating and managing a ServiceMeshControlPlane resource to deploy the Service Mesh control plane
+* Creating a ServiceMeshMemberRoll resource to specify the namespaces associated with the Service Mesh.
 
 Following command line tools are needed for lab
 

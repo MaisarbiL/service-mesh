@@ -10,10 +10,6 @@ Installing the OpenShift Service Mesh involves :
 * Intall Jaeger Operator
 * Install Kiali Operator
 * Installing the Service Mesh Operator
-* Create project istio-system
-* Creating and managing a ServiceMeshControlPlane resource to deploy the Service Mesh control plane
-* Creating a ServiceMeshMemberRoll resource to specify the namespaces associated with the Service Mesh.
-
 
 ## Install Operators
 

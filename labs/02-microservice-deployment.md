@@ -109,6 +109,9 @@ Login to OpenShift Web Console. Then select Developer Console
 Both Frontend and Backend app are shown as follow
 ![Topology View](../images/topology-view.png)
 
+Check for backend pod memory and cpu usage
+....WIP....
+
 ### Test
 Test frontend app by
 
