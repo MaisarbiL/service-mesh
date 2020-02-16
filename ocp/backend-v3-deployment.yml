@@ -39,7 +39,7 @@ spec:
             cpu: "0.2"
             memory: 120Mi
         env:
-          - name: backend
+          - name: app.backend
             value: http://localhost:8080/version
         ports:
         - containerPort: 8080
