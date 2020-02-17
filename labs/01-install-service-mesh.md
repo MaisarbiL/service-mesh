@@ -135,9 +135,9 @@ The Service Mesh operator has installed a control plane configured for multitena
 
 In this section of the lab, you create a ServiceMeshMemberRoll resource with the project/namespaces you wish to be part of the mesh. This ServiceMeshMemberRoll is required to be named default and exist in the same namespace where the ServiceMeshControlPlane resource resides (ie: $USERID-istio-system).
 
-Sample Service Mesh Member Roll [Member Roll](../install/memberroll.yml) for project name "user1"
+Sample Service Mesh Member Roll [Member Roll](../install/memberroll.yml) for project name "userX"
 
-**Remark: You need to change member to your User ID (ie: $USERID)**
+**Remark: You need to change member to your User ID e.g. ${USERID}**
 
 ```
 apiVersion: maistra.io/v1
@@ -146,15 +146,23 @@ metadata:
   name: default
 spec:
   members:
-  - user1
+  - userX
 
 ```
 
-Create member roll by oc command
+Use shell script to create Member Roll (This shell script required environment variable $USERID)
+
+```
+scripts/create-member-roll.sh
+```
+
+Or you can use oc command to create member roll. Remark that you need to change member in [install/member.yml](../install/memberroll.yml) to your user ID before create member roll.
 
 ```
 oc apply -f install/memberroll.yml -n $USERID-istio-system
 ```
+
+
 
 By Web Console, navigate to: Operators -> Installed Operators then select Red Hat OpenShift Service Mesh and Select Create Instance under Istio Service Member Roll
 Change member to your User ID (:ie user1) then select Create

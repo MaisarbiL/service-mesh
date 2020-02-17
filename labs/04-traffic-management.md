@@ -22,6 +22,7 @@ We can experiment with Istio routing rules by using our microservices applicatio
 ![Backend v1 v2 80% 20%](../images/microservices-with-v1-v2-80-20.png)
 
 ### Destination Rule
+
 Review the following Istio's destination rule configuration file [destination-rule-backend-v1-v2.yml](../istio-files/destination-rule-backend-v1-v2.yml)  to define subset called v1 and v2 by matching label "app" and "version" and using Round Robin for load balancing policy.
 
 **Remark: If you don't comfortable with YAML and CLI, You can try using [Kiali Console to create Istio policy](#routing-policy-with-kiali-console)**
@@ -51,6 +52,7 @@ spec:
 ```
 
 ### Virtual Service
+
 Review the following Istio's  virtual service configuration file [virtual-service-backend-v1-v2-80-20.yml](../istio-files/virtual-service-backend-v1-v2-80-20.yml) to route 80% of traffic to version v1 and 20% of traffic to version v2
 
 ```
@@ -74,6 +76,7 @@ spec:
 ```
 
 ### Apply Istio Policy for A/B deployment
+
 Run oc apply command to apply Istio policy.
 
 ```
@@ -89,6 +92,7 @@ virtualservice.networking.istio.io/backend-virtual-service created
 
 ```
 ### Create Routing Policy by Kiali Console 
+
 Login to the Kiali web console. Select "Services" on the left menu. Then select backend service
 
 On the main screen of backend service. Click Action menu on the top right and select "Create Weighted Routing"
@@ -116,6 +120,7 @@ Example of Destination Rule configuration
 Remark: You can view YAML by click "YAML" tab
 
 ### Verify Istio Configuration
+
 Login to the Kiali web console. Select "Istio Config" on the left menu. Verify that Destination Rule and Virtual Service are created and get green check mark. (If there is error in configuration. Check YAML tab, Kiali will highlight that which line(s) is caused error)
 
 ![Kiali Verify Config](../images/kiali-verify-config.png)
@@ -131,6 +136,7 @@ Click YAML to view YAML file.
 
 
 ### Test
+
 Test A/B deployment by run [run-50.sh](../scripts/run-50.sh)
 
 ```
@@ -157,13 +163,19 @@ Version v1: 39
 Version v2: 11
 ========================================================
 ```
-You can also check this splitting traffic with Kiali console by select Graph on left menu.
+You can check this splitting traffic with Kiali console by select Graph on left menu.
 
 Select Versioned app graph, Request percentage and enable animation.
 
 ![Kiali Graph 80-20](../images/kiali-graph-80-20.png)
 
+You can also check statistics of each service. From left menu Services, then select service e.g. Backend
+
+![Kiali Backend Traffic](../images/kiali-backend-traffic.png)
+
+
 ### Bonus: Play with Weight
+
 Istio configuration is just normal Kubernetes Custom Resource Definition (CRD) then you can use oc command to play with it
 
 Example
@@ -185,6 +197,7 @@ oc edit DestinationRule backend
 Refer to [Verify Istio Config](#verify-istio-config) section. You can also edit config from Kiali.
 
 ## Dark Launch by Mirroring Traffic
+
 Mirror all request to backend to backend-v3
 
 ![Mirror](../images/microservices-mirror.png)
@@ -258,6 +271,7 @@ Sample output
 
 
 ## Cleanup
+
 Run oc delete command to remove Istio policy.
 
 ```
@@ -275,3 +289,7 @@ oc delete -f ocp/backend-v3-service.yml -n $USERID
 
 You can also remove Istio policy by using Kiali Console by select Istio Config menu on the left then select each configuration and select menu Action on the upper right of page. Then click Delete
 ![](../images/kiali-delete-policy.png)
+
+## Next Topic
+
+[Ingress](./05-ingress.md)
