@@ -1,5 +1,6 @@
 # Control Traffic with Timeout
 ## Setup
+
 Currently backend v2 is set to delay response in 6 sec. We will set backend virtual service to wait for 3 sec (timeout 3 sec).  Frontend will received HTTP response with Gateway Timeout (504) if elapsed time is longer than timeout period.
 
 ![Timeout 3s](../images/microservices-timeout-3s.png)
@@ -13,9 +14,15 @@ oc apply -f ocp/frontend-route.yml -n $USERID
 oc apply -f ocp/backend-v1-deployment.yml -n $USERID
 oc apply -f ocp/backend-v2-deployment.yml -n $USERID
 oc apply -f ocp/backend-service.yml -n $USERID
+watch oc get pods -n $USERID
+# or 
+# oc get pods -w -n $USERID
+# Wait until all backend-v1 pods status are Runnings and all container in pods are ready (2/2)
+
 ```
 
 # Virtual Service
+
 Review the following Istio's  virtual service configuration file 
 [virtual-service-backend-v1-v2-50-50-3s-timeout.yml](../istio-files/virtual-service-backend-v1-v2-50-50-3s-timeout.yml) to set timeout to 3 sec
 
@@ -43,6 +50,7 @@ spec:
 Run oc apply command to apply Istio policy.
 
 ```
+
 oc apply -f istio-files/destination-rule-backend-v1-v2.yml -n $USERID
 oc apply -f istio-files/virtual-service-backend-v1-v2-50-50-3s-timeout.yml -n $USERID
 
@@ -56,13 +64,16 @@ virtualservice.networking.istio.io/backend-virtual-service created
 ```
 
 Test again with cURL and check for 504 response code from backend version v2
+
 ```
 curl $FRONTEND_URL
 ```
 
 Result
 ```
+
 Frontend version: v1 => [Backend: http://backend:8080, Response: 504, Body: upstream request timeout]
+
 ```
 
 Run [run-50.sh](../scripts/run-50.sh)
@@ -101,3 +112,7 @@ oc delete -f istio-files/virtual-service-backend-v1-v2-80-20.yml -n $USERID
 oc delete -f istio-files/destination-rule-backend-v1-v2.yml -n $USERID
 
 ```
+
+## Next Topic
+
+[Circuit Breaker](./07-circuit-breaker.md)

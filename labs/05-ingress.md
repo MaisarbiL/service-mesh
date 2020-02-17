@@ -4,15 +4,20 @@ Configure service mesh gateway to control traffic that entering mesh.
 
 ![Microservice with Ingress Diagram](../images/microservices-with-ingress.png)
 ## Setup
+
 Deploy frontend v2 and remove backend v2
 
 ```
+
 oc apply -f ocp/frontend-v2-deployment.yml -n $USERID
 oc delete -f ocp/backend-v2-deployment.yml -n $USERID
-watch oc get pods -n $USERID # or using oc get pods -w -n $USERID
+watch oc get pods -n $USERID 
+# or using oc get pods -w -n $USERID
+
 ```
 
-## Gateway
+## Istio Gateway
+
 Review the following Istio's Gateway rule configuration file [ingress-gateway.yml](../istio-files/ingress-gateway.yml)  to create Istio Gateway.
 
 Run oc apply command to create Istio Gateway.
@@ -32,7 +37,9 @@ gateway.networking.istio.io/frontend-gateway created
 
 
 ## Routing by incoming HTTP header
+
 ### Destination Rule
+
 Review the following Istio's destination rule configuration file [destination-rule-frontend-v1-v2.yml](../istio-files/destination-rule-frontend-v1-v2.yml)  to define subset called v1 and v2 by matching label "app" and "version"
 
 
@@ -86,38 +93,65 @@ Login to the Kiali web console. Select "Services" on the left menu. Then select 
 * Add Gateway by enable Advanced Option then select Add Gateway  -->
 
 ### Test
+
 Get URL of Istio Gateway and set to environment variable by using following command
+
 ```
+
 export GATEWAY_URL=$(oc -n $USERID-istio-system get route istio-ingressgateway -o jsonpath='{.spec.host}')
 
 ```
+
 Verify that environment variable GATEWAY is set correctly.
+
 ```
+
 echo $GATEWAY_URL
+
 ```
+
 Sample output
+
 ```
+
 istio-ingressgateway-user1-istio-system.apps.cluster-bkk77-eeb3.bkk77-eeb3.example.opentlc.com
+
 ```
 
 Test with cURL by setting header name foo with value bar. Response will always from Frontend v1
+
 ```
+
 curl -v -H foo:bar $GATEWAY_URL
+
 ```
+
+Check for header foo in HTTP request
+
+![foo](../images/curl-http-header.png)
+
 Sample outout
+
 ```
-Frontend version: v1 => [Backend: http://backend:8080, Response: 200, Body: Backend version:v2,Response:200,Host:backend-v2-7655885b8c-b7nf2, Message: Hello World!!]
+
+Frontend version: v1 => [Backend: http://backend:8080, Response: 200, Body: Backend version:v1, Response:200, Host:backend-v1-797cf7f7b4-b9lnh, Status:200, Message: Hello, World]
+
 ```
+
 Test again witout specified parameter -H. Response will always from Frontend v2
+
 Sample outout
+
 ```
-Frontend version: v2 => [Backend: http://backend:8080, Response: 200, Body: Backend version:v2,Response:200,Host:backend-v2-7655885b8c-b7nf2, Message: Hello World!!]
+
+Frontend version: v2 => [Backend: http://backend:8080, Response: 200, Body: Backend version:v1, Response:200, Host:backend-v1-797cf7f7b4-b9lnh, Status:200, Message: Hello, World]
+
 ```
 
 You can also run script [run-50-ingress.sh](../scripts/run-50-ingress.sh) to generate round-robin request between frontend-v1 and frontend-v2
 
 ```
-scripts/run-50-ingress.sh
+scripts/run-50-foo-bar.sh
 ```
 
 Sample output
@@ -145,3 +179,7 @@ oc delete -f istio-files/destination-rule-frontend-v1-v2.yml -n $USERID
 oc delete -f ocp/frontend-v2-deployment.yml -n $USERID
 
 ```
+
+## Next Topic
+
+[Timeout](./06-timeout.md)
