@@ -53,12 +53,32 @@ oc login --username=%USERID% --server=<URL to OpenShift API>
 
 Use your browser login to OpenShift Web Admin Console
 
+### Labs Content
+
+Clone labs content to your working directory. Open your terminal (For OSX terminal, iTerm2, etc and CMD for Windows) then run following command
+
+```
+
+git clone https://gitlab.com/workshop6/service-mesh.git
+
+```
+
+If you don't have git, click this Link =>[Service Mesh Workshop](https://gitlab.com/workshop6/service-mesh)
+
+
+Download labs content by click following icon.
+
+![Dowload from Git](../images/download-from-git.png)
+
 ### Projects
 Create projects (namespace) for Service Mesh's control plane and your applications (for testing)
+
 ```
+
 oc new-project $USERID-istio-system --display-name="User1 Istio System"
 oc new-project $USERID 
-
+## or use following bash script
+scripts/create-project.sh
 ```
 
 You can also use OpenShift Web Admin Console to create Project by select new project from top-left menu then create your project
@@ -72,35 +92,28 @@ Application
 
 ![Create ](../images/create-user-project.png)
 
-### Labs Content
-Clone labs content to your working directory. Open your terminal (For OSX terminal, iTerm2, etc and CMD for Windows) then run following command
-
-```
-git clone https://gitlab.com/workshop6/service-mesh.git
-
-```
-If you don't have git, click this Link =>[Service Mesh Workshop](https://gitlab.com/workshop6/service-mesh)
-
-Download labs content by click following icon.
-![Dowload from Git](../images/download-from-git.png)
-
 
 ## Create Service Mesh Control Plane
+
 Now that the Service Mesh Operator has been installed, you can now install a Service Mesh control plane.
 The previously installed Service Mesh operator watches for a ServiceMeshControlPlane resource in all namespaces. Based on the configurations defined in that ServiceMeshControlPlane, the operator creates the Service Mesh control plane.
 
 In this section of the lab, you define a ServiceMeshControlPlane and apply it to your **$USERID-istio-system namespace**.
-
-
-  
+ 
 * Install Control Plane using the custom resource file [basic install](../install/basic-install.yml)
     Mutual TLS is disbled by setting mtls to false.
     Kiali user is single sign-on with OpenShift
 * Create the service mesh control plane in the istio-system project from [basic-install.yml](../install/basic-install.yml)
+  
   By oc command
+  
   ```
+  
   oc apply -f install/basic-install.yml -n $USERID-istio-system
+  # or use following bash script
+  scripts/create-control-plane.sh
   ```
+  
   By Web Console, navigate to: Operators -> Installed Operators then select Red Hat OpenShift Service Mesh
 
   ![](../images/select-openshift-service-mesh.png)
@@ -130,7 +143,23 @@ In this section of the lab, you define a ServiceMeshControlPlane and apply it to
 
   **Remark: Total number of pods is 12**
 
+Verify control plane installation
+
+```
+oc get smcp -n ${USERID}-istio-system
+```
+
+Sample output
+
+```
+
+NAME            READY
+basic-install   True
+
+```
+
 ## Service Mesh Member Roll
+
 The Service Mesh operator has installed a control plane configured for multitenancy. This installation reduces the scope of the control plane to only those projects/namespaces listed in a ServiceMeshMemberRoll.
 
 In this section of the lab, you create a ServiceMeshMemberRoll resource with the project/namespaces you wish to be part of the mesh. This ServiceMeshMemberRoll is required to be named default and exist in the same namespace where the ServiceMeshControlPlane resource resides (ie: $USERID-istio-system).
@@ -153,15 +182,34 @@ spec:
 Use shell script to create Member Roll (This shell script required environment variable $USERID)
 
 ```
+
 scripts/create-member-roll.sh
+
 ```
 
 Or you can use oc command to create member roll. Remark that you need to change member in [install/member.yml](../install/memberroll.yml) to your user ID before create member roll.
 
 ```
+
 oc apply -f install/memberroll.yml -n $USERID-istio-system
+
 ```
 
+Verify status of member roll
+
+```
+
+oc get smmr -n ${USERID}-istio-system
+
+```
+
+Sample output
+
+```
+NAME      MEMBERS
+default   [user1]
+
+```
 
 
 By Web Console, navigate to: Operators -> Installed Operators then select Red Hat OpenShift Service Mesh and Select Create Instance under Istio Service Member Roll
@@ -174,4 +222,5 @@ Verify that member roll is created
 ![](../images/create-member-roll-done.png)
 
 ## Next Topic
+
 [MicroService Application Deployment](./02-microservice-deployment.md)
