@@ -126,6 +126,10 @@ curl -v -H foo:bar $GATEWAY_URL
 
 ```
 
+Check for header foo in HTTP request
+
+![foo](../images/curl-http-header.png)
+
 Sample outout
 
 ```
