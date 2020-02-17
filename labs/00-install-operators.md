@@ -30,3 +30,5 @@ Login to OpenShift Web Console using Adimin user
 * Following screen show all 4 operators are installed.
      ![Operators Installed](../images/installed-operators.png)
 
+## Next Topic
+[Configure Service Mesh Control Plane](./01-install-service-mesh.md)
