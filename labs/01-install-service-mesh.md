@@ -114,7 +114,7 @@ In this section of the lab, you define a ServiceMeshControlPlane and apply it to
   scripts/create-control-plane.sh
   ```
   
-  By Web Console, navigate to: Operators -> Installed Operators then select Red Hat OpenShift Service Mesh
+  <!-- By Web Console, navigate to: Operators -> Installed Operators then select Red Hat OpenShift Service Mesh
 
   ![](../images/select-openshift-service-mesh.png)
 
@@ -124,7 +124,7 @@ In this section of the lab, you define a ServiceMeshControlPlane and apply it to
 
   Copy and paste custom resource file [basic install](../install/basic-install.yml) to YAML section then click Create
 
-  ![](../images/create-control-plane-yaml.png)
+  ![](../images/create-control-plane-yaml.png) -->
 
 
 * Watch the process of deployment
@@ -212,14 +212,14 @@ default   [user1]
 ```
 
 
-By Web Console, navigate to: Operators -> Installed Operators then select Red Hat OpenShift Service Mesh and Select Create Instance under Istio Service Member Roll
+<!-- By Web Console, navigate to: Operators -> Installed Operators then select Red Hat OpenShift Service Mesh and Select Create Instance under Istio Service Member Roll
 Change member to your User ID (:ie user1) then select Create
 
 ![](../images/create-member-roll-yaml.png)
 
 Verify that member roll is created
 
-![](../images/create-member-roll-done.png)
+![](../images/create-member-roll-done.png) -->
 
 ## Next Topic
 
