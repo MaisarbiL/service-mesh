@@ -31,14 +31,21 @@ You can  also  download oc tool and cURL for OSX and Windows here => [Link](http
 ## Setup
 
 ### Environment Variables/Login to OpenShift
+
 Setup environment variables
+
 ```
+
 export USERID=<your user ID> 
 
 ```
+
 For Windows
+
 ```
+
 set USERID=<your user ID>
+
 ```
 
 Login to OpenShift with oc command by
@@ -51,7 +58,7 @@ For Windows
 oc login --username=%USERID% --server=<URL to OpenShift API> 
 ```
 
-Use your browser login to OpenShift Web Admin Console
+Use your browser to open OpenShift Web Admin Console and login with your User ID
 
 ### Labs Content
 
@@ -71,11 +78,12 @@ Download labs content by click following icon.
 ![Dowload from Git](../images/download-from-git.png)
 
 ### Projects
+
 Create projects (namespace) for Service Mesh's control plane and your applications (for testing)
 
 ```
 
-oc new-project $USERID-istio-system --display-name="User1 Istio System"
+oc new-project $USERID-istio-system --display-name="$USERID Istio System"
 oc new-project $USERID 
 ## or use following bash script
 scripts/create-project.sh
@@ -141,7 +149,7 @@ In this section of the lab, you define a ServiceMeshControlPlane and apply it to
 
   ![watch istio pods web console](../images/watch-pods-istio-system.png)
 
-  **Remark: Total number of pods is 12**
+**Remark: Total number of pods is 12**
 
 Verify control plane installation
 
@@ -179,19 +187,21 @@ spec:
 
 ```
 
-Use shell script to create Member Roll (This shell script required environment variable $USERID)
-
-```
-
-scripts/create-member-roll.sh
-
-```
-
-Or you can use oc command to create member roll. Remark that you need to change member in [install/member.yml](../install/memberroll.yml) to your user ID before create member roll.
+Use oc command to create member roll. Remark that you need to change member in [install/member.yml](../install/memberroll.yml) to your user ID before create member roll.
 
 ```
 
 oc apply -f install/memberroll.yml -n $USERID-istio-system
+
+```
+
+Or use shell script to create Member Roll (This shell script required environment variable $USERID)
+
+```
+
+scripts/create-member-roll.sh
+# Remark: this shell script use sed with OSX's style parameter
+# Edit comment if you are on linux
 
 ```
 
