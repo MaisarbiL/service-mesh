@@ -76,6 +76,7 @@ Authorization: Bearer <token>
 Test with token which issue from invalid issuer.
 
 ```
+GATEWAY_URL=$(oc get route istio-ingressgateway -n $USERID-istio-system -o jsonpath='{.spec.host}')
 TOKEN=$(cat keycloak/jwt-wrong-realm.txt)
 curl -v --header "Authorization: Bearer $TOKEN" $GATEWAY_URL
 
