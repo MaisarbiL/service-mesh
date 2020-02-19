@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 COUNT=0
 MAX=50
 VERSION1=0

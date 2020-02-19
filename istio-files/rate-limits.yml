@@ -6,7 +6,7 @@ spec:
   quotas:
   - name: requestcount.quota.user5
     maxAmount: 5
-    validDuration: 10s
+    validDuration: 1s
 ---
 apiVersion: config.istio.io/v1alpha2
 kind: quota

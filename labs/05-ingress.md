@@ -18,7 +18,7 @@ watch oc get pods -n $USERID
 
 ## Istio Gateway
 
-Review the following Istio's Gateway rule configuration file [ingress-gateway.yml](../istio-files/ingress-gateway.yml)  to create Istio Gateway.
+Review the following Istio's Gateway rule configuration file [frontend-gateway.yml](../istio-files/frontend-gateway.yml)  to create Istio Gateway.
 
 Run oc apply command to create Istio Gateway.
 

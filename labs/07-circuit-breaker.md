@@ -10,7 +10,7 @@ Setup microservices apps by remove backend-v2 and scale backend-v1 to 3 pods.
 ```
 
 oc delete -f ocp/backend-v2-deployment.yml -n $USERID
-oc scale deployment backend-v1 --replicas=3 -n $USERID
+oc scale deployment backend-v1 --replicas=2 -n $USERID
 watch oc get pods -n $USERID
 
 # or 
@@ -26,18 +26,16 @@ Sample output
 NAME                          READY   STATUS    RESTARTS   AGE
 backend-v1-6ddf9c7dcf-sqxqz   2/2     Running   0          8h
 backend-v1-6ddf9c7dcf-vm6kb   2/2     Running   0          8h
-backend-v1-6ddf9c7dcf-x6gkh   2/2     Running   0          8h
 frontend-v1-655f4478c-wn7wr   2/2     Running   0          9h
 
 ```
 
-You can also scaleup pod by using OpenShift Web Console. Select Workloads->Deployment on the left-menu. Then select backend-v1
+You can also scaleup pod by using OpenShift Developer Console. From Topology view, click on Backend v1 donut, Overview tab.
 
-![Deploymennt](../images/openshift-console-deployment.png)
+Scale pod to 2 by click upper arrow icon.
 
-Scale pod to 3 by click upper arrow icon.
+![scale up](../images/openshift-scale-deployment.png)
 
-![Scaleup](../images/openshift-console-scaleup.png)
 
 We will force one backend-v1 pod to return 504. This can be done by rsh into pod the curl to /stop (backend-v1 will always return 504 after receiving /stop. This is for demo)
 
@@ -49,7 +47,7 @@ oc exec -n $USERID  <pod name> curl http://localhost:8080/stop
 
 ```
 
-You can also use OpenShift Web Console. Select Workloads->Pods on the left-menu. Then select one of backend-v1 pods.
+You can also use OpenShift Developer Console. From Topology view, click on Backend v1 donut, Resources tab, click on one pod.
 
 ![Select pod](../images/openshift-console-pod.png)
 
@@ -57,7 +55,7 @@ select Terminal tab then run cURL command
 
 ![Terminal](../images/openshift-console-terminal.png)
 
-Test with [run50.sh](../scripts/run-50.sh) and check that with averagely 3 requests 1 request will response with response code 504
+Test with [run50.sh](../scripts/run-50.sh) and check that response is round robin between 504 and 200 
 
 ```
 
@@ -68,15 +66,12 @@ scripts/run-50.sh
 Sample output
 ```
 ...
-Backend:v1, Response Code: 200, Host:backend-v1-54696877b-z55b6, Elapsed Time:1.225209 sec
-Backend:v1, Response Code: 200, Host:backend-v1-54696877b-gl6kd, Elapsed Time:5.816343 sec
-Backend:v1, Response Code: 504, Host:backend-v1-54696877b-zvlp8, Elapsed Time:0.192307 sec
-Backend:v1, Response Code: 200, Host:backend-v1-54696877b-z55b6, Elapsed Time:3.807361 sec
-Backend:v1, Response Code: 200, Host:backend-v1-54696877b-gl6kd, Elapsed Time:0.850139 sec
-Backend:v1, Response Code: 504, Host:backend-v1-54696877b-zvlp8, Elapsed Time:0.111848 sec
-Backend:v1, Response Code: 200, Host:backend-v1-54696877b-z55b6, Elapsed Time:0.334275 sec
-Backend:v1, Response Code: 200, Host:backend-v1-54696877b-gl6kd, Elapsed Time:0.346220 sec
-Backend:v1, Response Code: 504, Host:backend-v1-54696877b-zvlp8, Elapsed Time:0.114360 sec
+Backend:v1, Response Code: 200, Host:backend-v1-98f8c6c49-cdvbh, Elapsed Time:1.508606 sec
+Backend:v1, Response Code: 504, Host:backend-v1-98f8c6c49-vk65z, Elapsed Time:0.161270 sec
+Backend:v1, Response Code: 200, Host:backend-v1-98f8c6c49-cdvbh, Elapsed Time:0.367105 sec
+Backend:v1, Response Code: 504, Host:backend-v1-98f8c6c49-vk65z, Elapsed Time:0.139964 sec
+Backend:v1, Response Code: 200, Host:backend-v1-98f8c6c49-cdvbh, Elapsed Time:0.358144 sec
+Backend:v1, Response Code: 504, Host:backend-v1-98f8c6c49-vk65z, Elapsed Time:0.148808 sec
 ...
 ```
 
@@ -131,27 +126,17 @@ Sample output
 
 ```
 
-Backend:v1, Response Code: 504, Host:backend-v1-54696877b-zvlp8, Elapsed Time:0.131285 sec
-Backend:v1, Response Code: 200, Host:backend-v1-54696877b-gl6kd, Elapsed Time:1.036776 sec
-Backend:v1, Response Code: 200, Host:backend-v1-54696877b-z55b6, Elapsed Time:1.079769 sec
-Backend:v1, Response Code: 200, Host:backend-v1-54696877b-gl6kd, Elapsed Time:0.360221 sec
-Backend:v1, Response Code: 200, Host:backend-v1-54696877b-z55b6, Elapsed Time:0.340531 sec
-Backend:v1, Response Code: 200, Host:backend-v1-54696877b-gl6kd, Elapsed Time:0.353228 sec
-Backend:v1, Response Code: 200, Host:backend-v1-54696877b-gl6kd, Elapsed Time:0.407192 sec
-Backend:v1, Response Code: 200, Host:backend-v1-54696877b-z55b6, Elapsed Time:0.407578 sec
-Backend:v1, Response Code: 200, Host:backend-v1-54696877b-gl6kd, Elapsed Time:0.394858 sec
-Backend:v1, Response Code: 200, Host:backend-v1-54696877b-z55b6, Elapsed Time:0.396541 sec
-Backend:v1, Response Code: 200, Host:backend-v1-54696877b-gl6kd, Elapsed Time:0.376350 sec
-Backend:v1, Response Code: 200, Host:backend-v1-54696877b-z55b6, Elapsed Time:0.369998 sec
-Backend:v1, Response Code: 200, Host:backend-v1-54696877b-gl6kd, Elapsed Time:0.339832 sec
-Backend:v1, Response Code: 200, Host:backend-v1-54696877b-gl6kd, Elapsed Time:0.332309 sec
-Backend:v1, Response Code: 200, Host:backend-v1-54696877b-z55b6, Elapsed Time:0.339841 sec
-Backend:v1, Response Code: 200, Host:backend-v1-54696877b-gl6kd, Elapsed Time:0.325807 sec
-Backend:v1, Response Code: 200, Host:backend-v1-54696877b-z55b6, Elapsed Time:0.340239 sec
-Backend:v1, Response Code: 200, Host:backend-v1-54696877b-gl6kd, Elapsed Time:0.308159 sec
-Backend:v1, Response Code: 200, Host:backend-v1-54696877b-gl6kd, Elapsed Time:0.337028 sec
+Backend:v1, Response Code: 200, Host:backend-v1-98f8c6c49-cdvbh, Elapsed Time:1.508682 sec
+Backend:v1, Response Code: 504, Host:backend-v1-98f8c6c49-vk65z, Elapsed Time:0.174340 sec
+Backend:v1, Response Code: 200, Host:backend-v1-98f8c6c49-cdvbh, Elapsed Time:0.371816 sec
+Backend:v1, Response Code: 200, Host:backend-v1-98f8c6c49-cdvbh, Elapsed Time:0.366507 sec
 ...
 ...
+...
+Backend:v1, Response Code: 200, Host:backend-v1-98f8c6c49-cdvbh, Elapsed Time:0.362117 sec
+Backend:v1, Response Code: 200, Host:backend-v1-98f8c6c49-cdvbh, Elapsed Time:0.470078 sec
+Backend:v1, Response Code: 200, Host:backend-v1-98f8c6c49-cdvbh, Elapsed Time:0.363250 sec
+Backend:v1, Response Code: 200, Host:backend-v1-98f8c6c49-cdvbh, Elapsed Time:0.485674 sec
 ========================================================
 Total Request: 50
 Version v1: 49
@@ -159,6 +144,10 @@ Version v2: 0
 ========================================================
 
 ```
+
+Check Kiali Graph
+
+![Kiali Circuit Breaker](../images/kiali-graph-circuit-breaker.png)
 
 ## Clean Up
 
@@ -178,4 +167,4 @@ oc delete -f ocp/frontend-route.yml -n $USERID
 
 ## Next Topic
 
-[Secure with mTLS](./08-secure-with-mTLS.md)
+[Secure with mTLS](./08-securing-with-mTLS.md)
