@@ -1,5 +1,6 @@
 # Secure Service with Mutual TLS
 
+Mutual TLS is quite cubersome for develop to authenticate with client side certificate. Istio sidecar can automatically validate mutual TLS for communication within Mesh.
 
 
 ## Setup
