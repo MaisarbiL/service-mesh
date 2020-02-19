@@ -2,7 +2,6 @@
 
 Table of Content
 
- * [OpenShift Service Mesh](#openshift-service-mesh)
  * [Install Operators](labs/00-install-operators.md)
  * [Configure Control Plane](labs/01-install-service-mesh.md)
  * [Microservices Deployment](labs/02-microservice-deployment.md)
