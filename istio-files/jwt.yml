@@ -8,8 +8,9 @@ spec:
   origins:
   - jwt:
       issuer: "http://voravit.example.com:8080/auth/realms/example.com"
+      jwksUri: "https://gitlab.com/workshop6/service-mesh/raw/master/keycloak/jwks.json"
       #issuer: "testing@secure.istio.io"
-      jwksUri: ""
+      #jwksUri: "https://raw.githubusercontent.com/istio/istio/release-1.4/security/tools/jwt/samples/jwks.json"
   principalBinding: USE_ORIGIN
   # Get Cert from RHSSO
   # curl http://localhost:8080/auth/realms/example.com/protocol/openid-connect/certs
