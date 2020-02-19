@@ -12,6 +12,7 @@ Table of Content
  * [Control traffic with timeout](labs/06-timeout.md)
  * [Service Resilience with Circuit Breaker](labs/07-circuit-breaker.md)
  * [Secure with Mutual TLS](labs/08-securing-with-mTLS.md)
+ * [Secure with JWT Authentication](labs/09-jwt-authentication.md)
 
 # OpenShift Service Mesh
 
