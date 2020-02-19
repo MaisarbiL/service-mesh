@@ -10,15 +10,14 @@ Create frontend and backend application (same as previous lab) along with Istio 
 We need istio gateway because we want frontend app to authenticate by JWT token.
 
 ```
-
+oc delete -f ocp/frontend-route.yml -n $USERID
 oc apply -f ocp/frontend-v1-deployment.yml -n $USERID
 oc apply -f ocp/frontend-service.yml -n $USERID
-oc delete -f ocp/frontend-route.yml -n $USERID
 oc apply -f ocp/backend-v1-deployment.yml -n $USERID
 oc apply -f ocp/backend-v2-deployment.yml -n $USERID
 oc apply -f ocp/backend-service.yml -n $USERID
-oc apply -f istio/frontend-gateway.yml -n $USERID
-oc apply -f istio/virtual-service-frontend.yml -n $USERID
+oc apply -f istio-files/frontend-gateway.yml -n $USERID
+oc apply -f istio-files/virtual-service-frontend.yml -n $USERID
 watch oc get pods -n $USERID
 
 ```
@@ -76,6 +75,7 @@ Authorization: Bearer <token>
 Test with token which issue from invalid issuer.
 
 ```
+
 GATEWAY_URL=$(oc get route istio-ingressgateway -n $USERID-istio-system -o jsonpath='{.spec.host}')
 TOKEN=$(cat keycloak/jwt-wrong-realm.txt)
 curl -v --header "Authorization: Bearer $TOKEN" $GATEWAY_URL
@@ -85,6 +85,7 @@ curl -v --header "Authorization: Bearer $TOKEN" $GATEWAY_URL
 Sample output
 
 ```
+
 ....
 < HTTP/1.1 401 Unauthorized
 ...
@@ -96,6 +97,7 @@ Origin authentication failed.* Closing connection 0
 Test again with valid JWT token
 
 ```
+
 TOKEN=$(cat keycloak/jwt.txt)
 curl --header "Authorization: Bearer $TOKEN" $GATEWAY_URL
 
@@ -114,9 +116,10 @@ Frontend version: v1 => [Backend: http://backend:8080, Response: 200, Body: Back
 Run oc delete command to remove Istio policy.
 
 ```
+
 oc delete -f istio-files/frontend-jwt-authentication.yml -n $USERID
-oc delete -f istio/frontend-gateway.yml -n $USERID
-oc delete -f istio/virtual-service-frontend.yml -n $USERID
+oc delete -f istio-files/frontend-gateway.yml -n $USERID
+oc delete -f istio-files/virtual-service-frontend.yml -n $USERID
 
 ```
 
