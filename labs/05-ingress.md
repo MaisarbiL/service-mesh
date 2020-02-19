@@ -148,7 +148,7 @@ Frontend version: v2 => [Backend: http://backend:8080, Response: 200, Body: Back
 
 ```
 
-You can also run script [run-50-ingress.sh](../scripts/run-50-ingress.sh) to generate round-robin request between frontend-v1 and frontend-v2
+You can also run script [run-50-foo-bar.sh](../scripts/run-50-foo-bar.sh) to generate round-robin request between frontend-v1 and frontend-v2
 
 ```
 scripts/run-50-foo-bar.sh
