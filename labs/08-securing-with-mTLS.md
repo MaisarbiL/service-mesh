@@ -62,11 +62,11 @@ Test by using station pod to connect to backend pod
 
 ```
 
-oc exec $(oc get pod -n $USERID | grep frontend | cut -d " " -f1) -c frontend curl http://backend:8080 -n $USERID
+oc exec -n $USERID $(oc get pod -n $USERID | grep station | cut -d " " -f1) -c frontend curl http://backend:8080 -n $USERID
 
 # or
 
-oc exec <station pod> curl http://backend:8080 -n $USERID
+oc exec -n $USERID <station pod> curl http://backend:8080 -n $USERID
 
 ```
 
@@ -131,11 +131,11 @@ Test with oc exec again from station pod
 
 ```
 
-oc exec $(oc get pod -n $USERID | grep station | cut -d " " -f1) curl http://backend:8080 -n $USERID
+oc exec -n $USERID $(oc get pod -n $USERID | grep station | cut -d " " -f1) -- curl -s http://backend:8080
 
 # or
 
-oc exec <station pod> curl http://backend:8080
+oc exec -n $USERID <station pod> curl http://backend:8080
 
 ```
 
@@ -154,11 +154,11 @@ Test again with oc exec from frontend pod
 
 ```
 
-oc exec $(oc get pod -n $USERID | grep frontend | cut -d " " -f1) -c frontend curl http://backend:8080 -n $USERID
+oc exec -n $USERID -c frontend $(oc get pod -n $USERID | grep frontend | cut -d " " -f1) -c frontend -- curl -s http://backend:8080
 
 # or
 
-oc exec <frontend pod> -c frontend curl http://backend:8080
+oc exec -n $USERID <frontend pod> -c frontend curl http://backend:8080
 
 ```
 
@@ -199,19 +199,21 @@ Test with oc exec again from station pod
 
 ```
 
-oc exec $(oc get pod -n $USERID | grep station | cut -d " " -f1) curl http://frontend:8080 -n $USERID
+oc exec -n $USERID $(oc get pod -n $USERID | grep station | cut -d " " -f1) -- curl -s http://frontend:8080
 
 # or
 
-oc exec <station pod> curl http://frontend:8080
+oc exec -n $USERID <station pod>  -- curl -s http://frontend:8080
 
 ```
 
 Sample output
 
 ```
+
 curl: (56) Recv failure: Connection reset by peer
 command terminated with exit code 56
+
 ```
 
 Because station pod is not part of Service Mesh then authentication is failed.
@@ -219,13 +221,21 @@ Because station pod is not part of Service Mesh then authentication is failed.
 Test again with oc exec from backend pod
 
 ```
-oc exec <backend pod> -c backend curl http://frontend:8080
+
+oc exec -n $USERID -c backend $(oc get pod -n $USERID | grep -m1 backend-v2 | cut -d " " -f1) -- curl -s http://frontend:8080
+
+# or
+
+oc exec -n $USERID <backend pod> -c backend -- curl -s http://frontend:8080
+
 ```
 
 Sample output
 
 ```
+
 Frontend version: v1 => [Backend: http://backend:8080, Response: 200, Body: Backend version:v2,Response:200,Host:backend-v2-7655885b8c-rt4jz, Message: Hello World!!]
+
 ```
 
 Because backend pod is part of Service Mesh then authentication is sucessed.

@@ -68,8 +68,9 @@ Then verify that pod will in previous step will return 504 when recieving reques
 
 ```
 
-oc exec -n $USERID -c backend $(oc get pod -n $USERID | grep -m1 backend | cut -d " " -f1) -- curl -w "\nResponse Code:%{response_code}" http://localhost:8080
+oc exec -n $USERID -c backend $(oc get pod -n $USERID | grep -m1 backend | cut -d " " -f1) -- curl -s  -w "\nResponse Code:%{response_code}" http://localhost:8080
 
+# or
 
 oc exec -n $USERID  -c backend <pod name>  -- curl -s  -w "\nResponse Code:%{response_code}" http://localhost:8080
 
