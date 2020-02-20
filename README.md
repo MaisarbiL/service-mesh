@@ -16,7 +16,7 @@ Table of Content
 
 # OpenShift Service Mesh
 
-[OpenShift Sevice Mesh Workshop](https://1drv.ms/b/s!ArOxOqm_sB7DiUkP5O-iF75k3Y-p?e=oqAHoI)
+[OpenShift Sevice Mesh Workshop](https://1drv.ms/b/s!ArOxOqm_sB7DiUuOSkP8GesA0Wfh?e=LcYBRd)
 
 
 
