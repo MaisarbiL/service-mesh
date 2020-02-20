@@ -11,12 +11,15 @@ There are two microservices in this lab that you will deploy to OpenShift. In a 
 You start by deploying the catalog service to OpenShift. The sidecar proxy is automatically injected by annotated deployment with 
 
 ```
+
 sidecar.istio.io/inject: "true"
+
 ```
 
 Check for annotation section in [deployment of backend v1](../ocp/backend-v1-deployment.yml)
 
 ```
+
 ...
 spec:
   replicas: 1
@@ -27,50 +30,63 @@ spec:
         version: v1
       annotations:
         sidecar.istio.io/inject: "true"
+
 ...
 ```
 
 Review configuration of backend v1 and v2. 
 * Backend v1 is configured to call https://httpbin.org/status/200 
   ```
+
   ...
         env:
           - name: app.backend
             value: https://httpbin.org/status/200
   ...
+  
   ```
 * Backend v2 is configured to call https://httpbin.org/delay/5. This will caused Backend v2 delay 5 sec to respose back to Frontend
   ```
+  
   ...
         env:
           - name: app.backend
             value: https://httpbin.org/delay/5
   ...
+  
   ```
 ### Deploy Applications
 
 ```
+
 oc apply -f ocp/frontend-v1-deployment.yml -n $USERID
 oc apply -f ocp/frontend-service.yml -n $USERID
 oc apply -f ocp/frontend-route.yml -n $USERID
 oc apply -f ocp/backend-v1-deployment.yml -n $USERID
 oc apply -f ocp/backend-v2-deployment.yml -n $USERID
 oc apply -f ocp/backend-service.yml -n $USERID
+
 ```
+
 or just run [deploy.sh](../scripts/deploy.sh) bash script
 
 ```
+
 scripts/deploy.sh
+
 ```
 
 Sample outout
+
 ```
+
 deployment.extensions/frontend created
 service/frontend created
 route.route.openshift.io/frontend created
 deployment.extensions/backend-v1 created
 deployment.extensions/backend-v2 created
 service/backend created
+
 ```
 
 Monitor the deployment of the pods:
@@ -82,15 +98,6 @@ watch oc get pods -n $USERID
 
 Wait until the Ready column displays 2/2 pods and the Status column displays Running:
 Press Control-C to exit.
-
-Monitor the deployment of the pods:
-```
-watch oc get pods -n $USERID
-# or
-oc get pods -w -n $USERID
-
-```
-Wait until the Ready column displays 2/2 pods and the Status column displays Running:
 
 You can also view pods status using OpenShift Developer Console Topology view
 
