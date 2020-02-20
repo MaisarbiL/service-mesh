@@ -169,6 +169,90 @@ Kiali Graph show that requests are from ingress gateway. (Comparing with "Unknow
 
 ![](../images/kiali-graph-ingress.png)
 
+
+## Fault Injection
+
+Fault injection is strategy to test resiliency of your service.
+
+We will remove frontend v2 and update destination rule to not included frontend v2 and apply virtual service with fault injection when header foo is equal to bar
+
+```
+
+oc apply -f istio-files/destination-rule-frontend.yml -n ${USERID}
+oc apply -f istio-files/virtual-service-frontend-fault-inject.yml -n $USERID
+oc delete -f ocp/frontend-v2-deployment.yml -n ${USERID}
+
+```
+
+Check virtual service with fault injection
+
+```
+
+...
+- fault:
+      abort:
+        # Return HTTP 500 for every request
+        httpStatus: 500
+        percentage:
+          value: 100
+    # When header foo = bar
+    match:
+    - headers:
+        foo:
+          exact: bar
+...
+
+```
+
+## Test
+
+You can use previous cURL command for test fault injection.
+
+```
+
+curl -v -H foo:bar  $GATEWAY_URL
+
+```
+
+Sample output
+
+```
+
+...
+> User-Agent: curl/7.64.1
+> Accept: */*
+> foo:bar
+>
+< HTTP/1.1 500 Internal Server Error
+< content-length: 18
+< content-type: text/plain
+
+...
+
+```
+
+Test again with header foo not equal to bar
+
+```
+
+curl -v -H foo:bar1  $GATEWAY_URL
+
+```
+
+Sample output
+
+```
+
+...
+> User-Agent: curl/7.64.1
+> Accept: */*
+> foo:bar1
+>
+< HTTP/1.1 200 OK
+...
+
+```
+
 ## Cleanup
 Run oc delete command to remove Istio policy.
 
@@ -176,7 +260,6 @@ Run oc delete command to remove Istio policy.
 oc delete -f istio-files/frontend-gateway.yml -n $USERID
 oc delete -f istio-files/virtual-service-frontend-header-foo-bar-to-v1.yml -n $USERID
 oc delete -f istio-files/destination-rule-frontend-v1-v2.yml -n $USERID
-oc delete -f ocp/frontend-v2-deployment.yml -n $USERID
 
 ```
 
