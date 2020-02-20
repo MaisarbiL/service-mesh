@@ -92,6 +92,10 @@ oc get pods -w -n $USERID
 ```
 Wait until the Ready column displays 2/2 pods and the Status column displays Running:
 
+You can also view pods status using OpenShift Developer Console Topology view
+
+![Topology View](../images/deploy-app.gif)
+
 ### OpenShift Developer Console
 
 Login to OpenShift Web Console. Then select Developer Console and select menu Topology
