@@ -1,12 +1,15 @@
 # Service Resilience by Circuit Breaker Lab
 
+Circuit breaking is one of pattern to build reslilient microservices. The idea is limit the impact of failures.
+
+In our lab, we will simulate that one pod of backend service has some error. We will use circuit breaker with pool ejection concept that if error happen then that particular pod will be ejected from pool in a period of time. This will result that frontend will not call that pod. So, failure will be minimized.
 
 
 ## Setup
 
 Setup microservices apps by remove backend-v2 and scale backend-v1 to 3 pods. 
 
-![](../images/microservices-circuit-breaker.png)
+![microservices circuit brekaer](../images/microservices-circuit-breaker.png)
 
 ```
 
