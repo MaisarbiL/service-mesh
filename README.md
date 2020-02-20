@@ -23,6 +23,6 @@ Table of Content
 
 ## Authors
 
-* **Voravit L** 
+* **Voravit L & Nuttee J** 
 
 
