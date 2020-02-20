@@ -47,7 +47,12 @@ Select one pod and connect to pod's terminal by using following oc command or Op
 
 ```
 
+oc exec -n $USERID -c backend $(oc get pod -n $USERID | grep -m1 backend | cut -d " " -f1) -- curl -s http://localhost:8080/stop
+
+#or
+
 oc exec -n $USERID  -c backend <pod name>  -- curl -s  http://localhost:8080/stop
+
 
 ```
 
@@ -62,6 +67,9 @@ Backend version:v1, Response:200, Host:backend-v1-6ddf9c7dcf-sqxqz , Status:200,
 Then verify that pod will in previous step will return 504 when recieving request.
 
 ```
+
+oc exec -n $USERID -c backend $(oc get pod -n $USERID | grep -m1 backend | cut -d " " -f1) -- curl -w "\nResponse Code:%{response_code}" http://localhost:8080
+
 
 oc exec -n $USERID  -c backend <pod name>  -- curl -s  -w "\nResponse Code:%{response_code}" http://localhost:8080
 

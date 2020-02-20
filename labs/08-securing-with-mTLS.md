@@ -62,6 +62,10 @@ Test by using station pod to connect to backend pod
 
 ```
 
+oc exec -n $USERID -c backend $(oc get pod -n $USERID | grep -m1 backend | cut -d " " -f1) -- curl -w "\nResponse Code:%{response_code}" http://localhost:8080
+
+#or
+
 oc exec <station pod> curl http://backend:8080 -n $USERID
 
 ```
