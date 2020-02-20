@@ -122,17 +122,7 @@ oc delete -f istio-files/frontend-gateway.yml -n $USERID
 oc delete -f istio-files/virtual-service-frontend.yml -n $USERID
 
 ```
+## Next Topic
 
-Delete all pods
+[Rate Limits](./10-rate-limits.md)
 
-```
-
-oc delete -f ocp/frontend-v1-deployment.yml -n $USERID
-oc delete -f ocp/frontend-service.yml -n $USERID
-oc delete -f ocp/backend-v1-deployment.yml -n $USERID
-oc delete -f ocp/backend-v2-deployment.yml -n $USERID
-oc delete -f ocp/backend-service.yml -n $USERID
-
-```
-
-## Congratulations. You just done all of our labs!!!!

@@ -4,9 +4,9 @@ metadata:
   name: handler
 spec:
   quotas:
-  - name: requestcount.quota.user5
-    maxAmount: 5
-    validDuration: 1s
+  - name: requestcount.quota.userX
+    maxAmount: 10
+    validDuration: 60s
 ---
 apiVersion: config.istio.io/v1alpha2
 kind: quota
@@ -44,11 +44,11 @@ kind: rule
 metadata:
   name: quota
 spec:
-  # quota only applies if you are not logged in.
+  # quota will not applied if header foo = bar
   match: match(request.headers["foo"],"bar") == false
   actions:
   - handler: handler.memquota
     instances:
     - requestcount.quota
 # Confirm quota instance
-# kubectl -n project-a get instance requestcountquota -o yaml
+# oc -n ${USERID} get instance requestcountquota -o yaml
