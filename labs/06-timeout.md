@@ -8,6 +8,7 @@ Currently backend v2 is set to delay response in 6 sec. We will set backend virt
 Deploy frontend v1, backend v1 and backend v2.
 
 ```
+
 oc apply -f ocp/frontend-v1-deployment.yml -n $USERID
 oc apply -f ocp/frontend-service.yml -n $USERID
 oc apply -f ocp/frontend-route.yml -n $USERID
@@ -27,6 +28,7 @@ Review the following Istio's  virtual service configuration file
 [virtual-service-backend-v1-v2-50-50-3s-timeout.yml](../istio-files/virtual-service-backend-v1-v2-50-50-3s-timeout.yml) to set timeout to 3 sec
 
 ```
+
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
@@ -45,6 +47,7 @@ spec:
         host: backend
         subset: v2
       weight: 50
+
 ```
 
 Run oc apply command to apply Istio policy.
@@ -57,7 +60,9 @@ oc apply -f istio-files/virtual-service-backend-v1-v2-50-50-3s-timeout.yml -n $U
 ```
 
 Sample outout
+
 ```
+
 destinationrule.networking.istio.io/backend created
 virtualservice.networking.istio.io/backend-virtual-service created
 
@@ -66,10 +71,13 @@ virtualservice.networking.istio.io/backend-virtual-service created
 Test again with cURL and check for 504 response code from backend version v2
 
 ```
+
 curl $FRONTEND_URL
+
 ```
 
 Result
+
 ```
 
 Frontend version: v1 => [Backend: http://backend:8080, Response: 504, Body: upstream request timeout]
@@ -79,7 +87,9 @@ Frontend version: v1 => [Backend: http://backend:8080, Response: 504, Body: upst
 Run [run-50.sh](../scripts/run-50.sh)
 
 ```
+
 scripts/run-50.sh
+
 ```
 
 Sample output
@@ -108,6 +118,7 @@ Check Graph in Kiali Console with Response time.
 Run oc delete command to remove Istio policy.
 
 ```
+
 oc delete -f istio-files/virtual-service-backend-v1-v2-80-20.yml -n $USERID
 oc delete -f istio-files/destination-rule-backend-v1-v2.yml -n $USERID
 

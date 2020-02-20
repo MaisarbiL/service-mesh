@@ -3,6 +3,7 @@
 
 
 ## Setup
+
 Setup microservices apps by remove backend-v2 and scale backend-v1 to 3 pods. 
 
 ![](../images/microservices-circuit-breaker.png)
@@ -64,7 +65,9 @@ scripts/run-50.sh
 ```
 
 Sample output
+
 ```
+
 ...
 Backend:v1, Response Code: 200, Host:backend-v1-98f8c6c49-cdvbh, Elapsed Time:1.508606 sec
 Backend:v1, Response Code: 504, Host:backend-v1-98f8c6c49-vk65z, Elapsed Time:0.161270 sec
@@ -73,6 +76,7 @@ Backend:v1, Response Code: 504, Host:backend-v1-98f8c6c49-vk65z, Elapsed Time:0.
 Backend:v1, Response Code: 200, Host:backend-v1-98f8c6c49-cdvbh, Elapsed Time:0.358144 sec
 Backend:v1, Response Code: 504, Host:backend-v1-98f8c6c49-vk65z, Elapsed Time:0.148808 sec
 ...
+
 ```
 
 ## Circuit Breaker and Pool Ejection
@@ -114,8 +118,10 @@ oc apply -f istio-files/destination-rule-backend-circuit-breaker-with-pool-eject
 Sample output
 
 ```
+
 virtualservice.networking.istio.io/backend-virtual-service created
 destinationrule.networking.istio.io/backend-destination-rule created
+
 ```
 
 ## Test

@@ -23,13 +23,17 @@ Review the following Istio's Gateway rule configuration file [frontend-gateway.y
 Run oc apply command to create Istio Gateway.
 
 ```
+
 oc apply -f istio-files/frontend-gateway.yml -n $USERID
+
 ```
 
 Sample outout
 
 ```
+
 gateway.networking.istio.io/frontend-gateway created
+
 ```
 
 <!-- **Remark: You can also using [Kiali Console to create Gateway](#create-gateway-using-kiali-console)** -->
@@ -44,13 +48,19 @@ Review the following Istio's destination rule configuration file [destination-ru
 
 
 Run oc apply command to create Istio Gateway.
+
 ```
+
 oc apply -f istio-files/destination-rule-frontend-v1-v2.yml -n $USERID
+
 ```
 
 Sample outout
+
 ```
+
 destinationrule.networking.istio.io/frontend created
+
 ```
 
 ### Virtual Service
@@ -70,13 +80,19 @@ Review the following Istio's  virtual service configuration file [virtual-servic
 ```
 
 Run oc apply command to apply Istio virtual service policy.
+
 ```
+
 oc apply -f istio-files/virtual-service-frontend-header-foo-bar-to-v1.yml -n $USERID
+
 ```
 
 Sample output
+
 ```
+
 virtualservice.networking.istio.io/frontend created
+
 ```
 <!-- ## Create Gateway using Kiali Console
 Login to the Kiali web console. Select "Services" on the left menu. Then select frontend service
@@ -151,12 +167,15 @@ Frontend version: v2 => [Backend: http://backend:8080, Response: 200, Body: Back
 You can also run script [run-50-foo-bar.sh](../scripts/run-50-foo-bar.sh) to generate round-robin request between frontend-v1 and frontend-v2
 
 ```
+
 scripts/run-50-foo-bar.sh
+
 ```
 
 Sample output
 
 ```
+
 ...
 Frontend version: v2
 Frontend version: v1
@@ -164,10 +183,12 @@ Frontend version: v2
 Frontend version: v1
 Frontend version: v2
 ...
+
 ```
+
 Kiali Graph show that requests are from ingress gateway. (Comparing with "Unknown" from previous lab)
 
-![](../images/kiali-graph-ingress.png)
+![KIali Graph with Ingress](../images/kiali-graph-ingress.png)
 
 
 ## Fault Injection
@@ -181,6 +202,7 @@ We will remove frontend v2 and update destination rule to not included frontend 
 oc apply -f istio-files/destination-rule-frontend.yml -n ${USERID}
 oc apply -f istio-files/virtual-service-frontend-fault-inject.yml -n $USERID
 oc delete -f ocp/frontend-v2-deployment.yml -n ${USERID}
+watch oc get pods -n ${USERID}
 
 ```
 
@@ -257,6 +279,7 @@ Sample output
 Run oc delete command to remove Istio policy.
 
 ```
+
 oc delete -f istio-files/frontend-gateway.yml -n $USERID
 oc delete -f istio-files/virtual-service-frontend-header-foo-bar-to-v1.yml -n $USERID
 oc delete -f istio-files/destination-rule-frontend-v1-v2.yml -n $USERID
