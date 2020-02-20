@@ -62,9 +62,9 @@ Test by using station pod to connect to backend pod
 
 ```
 
-oc exec -n $USERID -c backend $(oc get pod -n $USERID | grep -m1 backend | cut -d " " -f1) -- curl -w "\nResponse Code:%{response_code}" http://localhost:8080
+oc exec $(oc get pod -n $USERID | grep frontend | cut -d " " -f1) -c frontend curl http://backend:8080 -n $USERID
 
-#or
+# or
 
 oc exec <station pod> curl http://backend:8080 -n $USERID
 
@@ -131,6 +131,10 @@ Test with oc exec again from station pod
 
 ```
 
+oc exec $(oc get pod -n $USERID | grep station | cut -d " " -f1) curl http://backend:8080 -n $USERID
+
+# or
+
 oc exec <station pod> curl http://backend:8080
 
 ```
@@ -150,6 +154,10 @@ Test again with oc exec from frontend pod
 
 ```
 
+oc exec $(oc get pod -n $USERID | grep frontend | cut -d " " -f1) -c frontend curl http://backend:8080 -n $USERID
+
+# or
+
 oc exec <frontend pod> -c frontend curl http://backend:8080
 
 ```
@@ -163,6 +171,7 @@ Backend version:v1,Response:200,Host:backend-v1-6ddf9c7dcf-vlcr9, Message: Hello
 ```
 
 Because frontend pod is part of Service Mesh then authentication is sucessed.
+
 
 ## Enable Mutual TLS for Frontend Service
 
@@ -189,7 +198,13 @@ virtualservice.networking.istio.io/frontend created
 Test with oc exec again from station pod
 
 ```
+
+oc exec $(oc get pod -n $USERID | grep station | cut -d " " -f1) curl http://frontend:8080 -n $USERID
+
+# or
+
 oc exec <station pod> curl http://frontend:8080
+
 ```
 
 Sample output
