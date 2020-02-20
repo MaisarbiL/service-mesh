@@ -12,6 +12,7 @@ Table of Content
  * [Service Resilience with Circuit Breaker](labs/07-circuit-breaker.md)
  * [Secure with Mutual TLS](labs/08-securing-with-mTLS.md)
  * [Secure with JWT Authentication](labs/09-jwt-authentication.md)
+ * [Rate Limits](labs/10-rate-limits.md)
 
 # OpenShift Service Mesh
 
