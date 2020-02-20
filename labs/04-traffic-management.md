@@ -98,6 +98,28 @@ destinationrule.networking.istio.io/backend created
 virtualservice.networking.istio.io/backend-virtual-service created
 
 ```
+
+You can check status of Istio policies by
+
+```
+
+oc get istio-io -n $USERID
+
+```
+
+Sample output
+
+```
+
+NAME                                                           HOST      AGE
+destinationrule.networking.istio.io/backend-destination-rule   backend   2m38s
+
+NAME                                                         GATEWAYS   HOSTS       AGE
+virtualservice.networking.istio.io/backend-virtual-service              [backend]   2m40s
+
+
+```
+
 ### Create Routing Policy by Kiali Console 
 
 Login to the Kiali web console. Select "Services" on the left menu. Then select backend service
