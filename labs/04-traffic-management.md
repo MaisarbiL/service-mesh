@@ -28,6 +28,7 @@ Review the following Istio's destination rule configuration file [destination-ru
 **Remark: If you don't comfortable with YAML and CLI, You can try using [Kiali Console to create Istio policy](#routing-policy-with-kiali-console)**
 
 ```
+
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
@@ -49,6 +50,7 @@ spec:
     trafficPolicy:
       loadBalancer:
         simple: ROUND_ROBIN
+
 ```
 
 ### Virtual Service
@@ -56,6 +58,7 @@ spec:
 Review the following Istio's  virtual service configuration file [virtual-service-backend-v1-v2-80-20.yml](../istio-files/virtual-service-backend-v1-v2-80-20.yml) to route 80% of traffic to version v1 and 20% of traffic to version v2
 
 ```
+
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
@@ -73,6 +76,7 @@ spec:
         host: backend
         subset: v2
       weight: 20
+
 ```
 
 ### Apply Istio Policy for A/B deployment
@@ -80,13 +84,16 @@ spec:
 Run oc apply command to apply Istio policy.
 
 ```
+
 oc apply -f istio-files/destination-rule-backend-v1-v2.yml -n $USERID
 oc apply -f istio-files/virtual-service-backend-v1-v2-80-20.yml -n $USERID
 
 ```
 
 Sample outout
+
 ```
+
 destinationrule.networking.istio.io/backend created
 virtualservice.networking.istio.io/backend-virtual-service created
 
@@ -140,6 +147,7 @@ Click YAML to view YAML file.
 Test A/B deployment by run [run-50.sh](../scripts/run-50.sh)
 
 ```
+
 scripts/run-50.sh
 
 ```
@@ -147,6 +155,7 @@ scripts/run-50.sh
 Sample output
 
 ```
+
 ...
 Backend:v1, Response Code: 200, Host:backend-v1-6ddf9c7dcf-pppzc, Elapsed Time:0.890935 sec
 Backend:v1, Response Code: 200, Host:backend-v1-6ddf9c7dcf-pppzc, Elapsed Time:1.084210 sec
@@ -162,6 +171,7 @@ Total Request: 50
 Version v1: 39
 Version v2: 11
 ========================================================
+
 ```
 You can check this splitting traffic with Kiali console by select Graph on left menu.
 
@@ -179,19 +189,25 @@ You can also check statistics of each service. From left menu Services, then sel
 Istio configuration is just normal Kubernetes Custom Resource Definition (CRD) then you can use oc command to play with it
 
 Example
+
 ```
+
 # Run
 oc get DestinationRule -n $USERID
 # Output
 NAME       HOST       AGE
 backend   backend   11h
+
 ```
 
 Try to run "oc edit" to edit weight
+
 ```
+
 oc edit DestinationRule backend
 # Edit 80% and 20% and then save, run scripts/run-50.sh again then
 # check Kiali Graph
+
 ```
 
 Refer to [Verify Istio Config](#verify-istio-config) section. You can also edit config from Kiali.
@@ -203,15 +219,20 @@ Mirror all request to backend to backend-v3
 ![Mirror](../images/microservices-mirror.png)
 
 Run following command to create backend-v3
+
 ```
+
 oc apply -f ocp/backend-v3-deployment.yml -n $USERID
 oc apply -f ocp/backend-v3-service.yml -n $USERID
+
 ```
+
 **Remark: backend v3 create with app label backend-v3 and servive name backend-v3 then backend v3 is not included in backend service. You verify [backend-service.yml](../ocp/backend-service.yml) for this configuration**
 
 Review the following Istio's  virtual service configuration file [virtual-service-backend-v1-v2-mirror-to-v3.yml](../istio-files/virtual-service-backend-v1-v2-mirror-to-v3.yml) to mirror request to backend-v3
 
 ```
+
 ...
   - route:
     - destination:
@@ -224,17 +245,21 @@ Review the following Istio's  virtual service configuration file [virtual-servic
       weight: 20
     mirror:
       host: backend-v3
+
 ```
 
 Run oc apply command to apply Istio policy.
 
 ```
+
 oc apply -f istio-files/virtual-service-backend-v1-v2-mirror-to-v3.yml -n $USERID
 
 ```
 
 Sample outout
+
 ```
+
 virtualservice.networking.istio.io/backend-virtual-service configured
 
 ```
@@ -242,8 +267,10 @@ virtualservice.networking.istio.io/backend-virtual-service configured
 Open anoter terminal to view backend-v3 log
 
 ```
+
 # Use oc get pods to get pod name. Replace pod name in following commamnd
-oc tail -f <backend-v3 pod> -c backend -n $USERID
+oc logs -f <backend-v3 pod> -c backend -n $USERID
+
 ```
 
 Using Kiali Web Console to view pod's log by select Workloads on left menu then select log
@@ -253,12 +280,15 @@ Using Kiali Web Console to view pod's log by select Workloads on left menu then 
 Run cURL to test that every request is sent to backend-v3 by checking log of backend-v3 again.
 
 ```
+
 curl $FRONTEND_URL
+
 ```
 
 Sample output
 
 ```
+
 ...
 11:27:06 INFO  [co.ex.qu.BackendResource] (executor-thread-2) Request to: http://localhost:8080/version
 11:27:06 INFO  [co.ex.qu.BackendResource] (executor-thread-11) Get Version
@@ -267,6 +297,7 @@ Sample output
 11:27:08 INFO  [co.ex.qu.BackendResource] (executor-thread-11) Get Version
 11:27:08 INFO  [co.ex.qu.BackendResource] (executor-thread-2) Return Code: 200
 ...
+
 ```
 
 
@@ -275,6 +306,7 @@ Sample output
 Run oc delete command to remove Istio policy.
 
 ```
+
 oc delete -f istio-files/virtual-service-backend-v1-v2-80-20.yml -n $USERID
 oc delete -f istio-files/destination-rule-backend-v1-v2.yml -n $USERID
 
@@ -283,8 +315,10 @@ oc delete -f istio-files/destination-rule-backend-v1-v2.yml -n $USERID
 Delete all backend-v3 related
 
 ```
+
 oc delete -f ocp/backend-v3-deployment.yml -n $USERID
 oc delete -f ocp/backend-v3-service.yml -n $USERID
+
 ```
 
 You can also remove Istio policy by using Kiali Console by select Istio Config menu on the left then select each configuration and select menu Action on the upper right of page. Then click Delete
