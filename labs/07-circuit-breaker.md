@@ -47,9 +47,34 @@ Select one pod and connect to pod's terminal by using following oc command or Op
 
 ```
 
-oc exec -n $USERID  <pod name> curl http://localhost:8080/stop
+oc exec -n $USERID  -c backend <pod name>  -- curl -s  http://localhost:8080/stop
 
 ```
+
+Sample output
+
+```
+
+Backend version:v1, Response:200, Host:backend-v1-7699759f8f-b5x6s, Status:200, Message: Liveness: false
+```
+
+Then verify that pod will in previous step will return 504 when recieving request.
+
+```
+
+oc exec -n $USERID  -c backend <pod name>  -- curl -s  -w "\nResponse Code:%{response_code}" http://localhost:8080
+
+```
+
+Sample output
+
+```
+
+Backend version:v1, Response:504, Host:backend-v1-7699759f8f-b5x6s, Status:504, Message: Application liveness is set to false
+Response Code:504
+
+```
+
 
 You can also use OpenShift Developer Console. From Topology view, click on Backend v1 donut, Resources tab, click on one pod.
 
