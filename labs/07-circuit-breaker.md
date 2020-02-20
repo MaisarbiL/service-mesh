@@ -38,7 +38,7 @@ You can also scaleup pod by using OpenShift Developer Console. From Topology vie
 
 Scale pod to 2 by click upper arrow icon.
 
-![scale up](../images/openshift-scale-deployment.png)
+![scale up](../images/openshift-dev-console-scaleup.png)
 
 
 We will force one backend-v1 pod to return 504. This can be done by rsh into pod the curl to /stop (backend-v1 will always return 504 after receiving /stop. This is for demo)
@@ -55,7 +55,8 @@ Sample output
 
 ```
 
-Backend version:v1, Response:200, Host:backend-v1-7699759f8f-b5x6s, Status:200, Message: Liveness: false
+Backend version:v1, Response:200, Host:backend-v1-6ddf9c7dcf-sqxqz , Status:200, Message: Liveness: false
+
 ```
 
 Then verify that pod will in previous step will return 504 when recieving request.
@@ -70,7 +71,7 @@ Sample output
 
 ```
 
-Backend version:v1, Response:504, Host:backend-v1-7699759f8f-b5x6s, Status:504, Message: Application liveness is set to false
+Backend version:v1, Response:504, Host:backend-v1-6ddf9c7dcf-sqxqz , Status:504, Message: Application liveness is set to false
 Response Code:504
 
 ```
