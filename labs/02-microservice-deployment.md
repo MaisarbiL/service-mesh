@@ -134,6 +134,15 @@ export FRONTEND_URL=http://$(oc get route frontend -n $USERID -o jsonpath='{.sta
 curl $FRONTEND_URL
 
 ```
+**Remark: You can use [get-urls.sh](../scripts/get-urls.sh) for display and set environment variables for all URLs used through out labs**
+
+```
+
+. ./scripts/get-urls.sh
+## Remark that you need to use source (.) instead of run bash script
+## for set environment variables
+
+```
 
 You can also get Frontend Route from Developer Console
 
