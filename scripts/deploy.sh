@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 oc apply -f ocp/frontend-v1-deployment.yml -n $USERID
 oc apply -f ocp/backend-v1-deployment.yml -n $USERID
 oc apply -f ocp/backend-v2-deployment.yml -n $USERID

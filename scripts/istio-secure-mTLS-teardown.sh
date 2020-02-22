@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 oc delete -f istio-files/authentication-frontend-enable-mtls.yml -n $USERID
 oc delete -f istio-files/destination-rule-frontend-mtls.yml -n $USERID
 oc delete -f istio-files/virtual-service-frontend.yml -n $USERID

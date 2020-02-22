@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 oc delete -f ocp/backend-v1-deployment.yml -n $USERID
 oc delete -f ocp/backend-v2-deployment.yml -n $USERID
 oc delete -f ocp/backend-service.yml -n $USERID

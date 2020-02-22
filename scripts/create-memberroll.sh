@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # For Linux
 # sed -i 's/userX/'${USERID}'/g' install/memberroll.yml
 # For OSX

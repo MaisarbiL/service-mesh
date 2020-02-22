@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 echo "Check Control Plane Status"
 oc get smcp -n ${USERID}-istio-system
 echo "====================================="

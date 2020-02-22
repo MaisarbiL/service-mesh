@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 oc delete -f istio-files/destination-rule-backend-circuit-breaker-with-pool-ejection.yml -n $USERID
 oc delete -f istio-files/virtual-service-backend.yml -n $USERID
 oc delete -f ocp/backend-v1-deployment.yml -n $USERID

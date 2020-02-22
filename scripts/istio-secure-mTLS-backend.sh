@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 echo "Setup environment"
 oc apply -f ocp/frontend-v1-deployment.yml -n $USERID
 oc apply -f ocp/frontend-service.yml -n $USERID
