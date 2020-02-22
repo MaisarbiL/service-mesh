@@ -89,7 +89,7 @@ oc apply -f istio-files/frontend-rate-limits.yml -n $USERID
 
 ## Test
 
-Run following bash script to loop request to Frontend App
+Run following shell script to loop request to Frontend App
 
 ```
 

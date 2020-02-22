@@ -85,7 +85,7 @@ Create projects (namespace) for Service Mesh's control plane and your applicatio
 
 oc new-project $USERID-istio-system --display-name="$USERID Istio System"
 oc new-project $USERID 
-## or use following bash script
+## or use following shell script
 scripts/create-project.sh
 ```
 

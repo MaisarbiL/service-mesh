@@ -68,7 +68,7 @@ oc apply -f ocp/backend-service.yml -n $USERID
 
 ```
 
-or just run [deploy.sh](../scripts/deploy.sh) bash script
+or just run [deploy.sh](../scripts/deploy.sh) shell script
 
 ```
 
@@ -139,7 +139,7 @@ curl $FRONTEND_URL
 ```
 
 . ./scripts/get-urls.sh
-## Remark that you need to use source (.) instead of run bash script
+## Remark that you need to use source (.) instead of run shell script
 ## for set environment variables
 
 ```
