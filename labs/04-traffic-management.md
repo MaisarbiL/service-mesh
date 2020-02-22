@@ -122,6 +122,8 @@ virtualservice.networking.istio.io/backend-virtual-service              [backend
 
 ### Create Routing Policy by Kiali Console 
 
+**Remark: Menu for create Weight Routing will be grey out if there is any destination policy and/or virtual service already created for this service by CLI from yml file.**
+
 Login to the Kiali web console. Select "Services" on the left menu. Then select backend service
 
 On the main screen of backend service. Click Action menu on the top right and select "Create Weighted Routing"
