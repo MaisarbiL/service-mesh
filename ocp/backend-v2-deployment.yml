@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: quay.io/voravitl/backend-native:v2
+        image: quay.io/voravitl/backend-native:v1
         imagePullPolicy: Always
         resources:
           requests:
@@ -39,7 +39,9 @@ spec:
             cpu: "0.2"
             memory: 120Mi
         env:
-          - name: app.backend
+          - name: APP_BACKEND
             value: https://httpbin.org/delay/5
+          - name: APP_VERSION
+            value: v2
         ports:
         - containerPort: 8080

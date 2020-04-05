@@ -39,7 +39,9 @@ spec:
             cpu: "0.2"
             memory: 120Mi
         env:
-          - name: app.backend
+          - name: APP_BACKEND
             value: https://httpbin.org/status/200
+          - name: APP_VERSION
+            value: v1
         ports:
         - containerPort: 8080
