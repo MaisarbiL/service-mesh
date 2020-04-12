@@ -2,6 +2,19 @@
 
 Use the Red Hat OpenShift Service Mesh operator to deploy a multi-tenant Service Mesh
 
+<!-- TOC -->
+
+- [Red Hat OpenShift Service Mesh Control Plane Lab](#red-hat-openshift-service-mesh-control-plane-lab)
+  - [Setup](#setup)
+  - [Setup](#setup-1)
+    - [Environment Variables/Login to OpenShift](#environment-variableslogin-to-openshift)
+    - [Labs Content](#labs-content)
+    - [Projects](#projects)
+  - [Create Service Mesh Control Plane](#create-service-mesh-control-plane)
+  - [Service Mesh Member Roll](#service-mesh-member-roll)
+  - [Next Topic](#next-topic)
+
+<!-- /TOC -->
 
 ## Setup
 

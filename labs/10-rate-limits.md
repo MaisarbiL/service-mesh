@@ -2,6 +2,17 @@
 
 Istio can dynamically limit the traffic to a service and also can apply logic to determine that this limit will be applied or not based on attributes of incoming request e.g. HTTP header, source IP, etc and also able to specified destination.
 
+<!-- TOC -->
+
+- [Rate Limits](#rate-limits)
+  - [Setup](#setup)
+  - [Rate Limits](#rate-limits-1)
+  - [Test](#test)
+  - [Clean Up](#clean-up)
+  - [Congratulations. You just done all of our labs!!!!](#congratulations-you-just-done-all-of-our-labs)
+
+<!-- /TOC -->
+
 
 ## Setup
 

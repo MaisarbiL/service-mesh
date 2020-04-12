@@ -2,6 +2,15 @@
 
 Use the Red Hat OpenShift Service Mesh operator to deploy a multi-tenant Service Mesh
 
+<!-- TOC -->
+
+- [Red Hat OpenShift Service Mesh Installation Lab](#red-hat-openshift-service-mesh-installation-lab)
+  - [Setup](#setup)
+  - [Install Operators](#install-operators)
+  - [Next Topic](#next-topic)
+
+<!-- /TOC -->
+
 ## Setup
 
 Installing the OpenShift Service Mesh involves :

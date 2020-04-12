@@ -1,8 +1,25 @@
 # Istio Gateway and Routing by HTTP header
 
+<!-- TOC -->
+
+- [Istio Gateway and Routing by HTTP header](#istio-gateway-and-routing-by-http-header)
+  - [Setup](#setup)
+  - [Istio Gateway](#istio-gateway)
+  - [Routing by incoming HTTP header](#routing-by-incoming-http-header)
+    - [Destination Rule](#destination-rule)
+    - [Virtual Service](#virtual-service)
+    - [Test](#test)
+  - [Fault Injection](#fault-injection)
+  - [Test](#test-1)
+  - [Cleanup](#cleanup)
+  - [Next Topic](#next-topic)
+
+<!-- /TOC -->
+
 Configure service mesh gateway to control traffic that entering mesh.
 
 ![Microservice with Ingress Diagram](../images/microservices-with-ingress.png)
+
 ## Setup
 
 Deploy frontend v2 and remove backend v2

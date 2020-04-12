@@ -2,6 +2,18 @@
 
 Mutual TLS is quite cubersome for develop to authenticate with client side certificate. Istio sidecar can automatically validate mutual TLS for communication within Mesh.
 
+<!-- TOC -->
+
+- [Secure Service with Mutual TLS](#secure-service-with-mutual-tls)
+  - [Setup](#setup)
+  - [Enable Mutual TLS for Backend Service](#enable-mutual-tls-for-backend-service)
+  - [Test](#test)
+  - [Enable Mutual TLS for Frontend Service](#enable-mutual-tls-for-frontend-service)
+  - [Test](#test-1)
+  - [Clean Up](#clean-up)
+  - [Next Topic](#next-topic)
+
+<!-- /TOC -->
 
 ## Setup
 

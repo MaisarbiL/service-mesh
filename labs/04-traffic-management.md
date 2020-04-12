@@ -1,9 +1,27 @@
 <!-- # Dynamic Routing Lab
 
 Configure service mesh route rules to dynamically route and shape traffic between services -->
+
 ## Traffic Management
 In this lab you dynamically alter routing between different versions of the backend service.
 Routing within Service Mesh can be controlled by using Virtual Service and Routing Rules.
+
+<!-- TOC -->
+
+- [Traffic Management](#traffic-management)
+- [Traffic splitting by Percentage](#traffic-splitting-by-percentage)
+  - [Destination Rule](#destination-rule)
+  - [Virtual Service](#virtual-service)
+  - [Apply Istio Policy for A/B deployment](#apply-istio-policy-for-ab-deployment)
+  - [Create Routing Policy by Kiali Console](#create-routing-policy-by-kiali-console)
+  - [Verify Istio Configuration](#verify-istio-configuration)
+  - [Test](#test)
+  - [Bonus: Play with Weight](#bonus-play-with-weight)
+- [Dark Launch by Mirroring Traffic](#dark-launch-by-mirroring-traffic)
+- [Cleanup](#cleanup)
+- [Next Topic](#next-topic)
+
+<!-- /TOC -->
 
 <!-- Service Mesh Route rules control how requests are routed within service mesh.
 

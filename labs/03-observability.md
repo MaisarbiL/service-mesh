@@ -2,6 +2,20 @@
 
 Monitor your Istio service mesh with Kiali
 
+<!-- TOC -->
+
+- [Service Mesh Monitoring with Kiali Lab](#service-mesh-monitoring-with-kiali-lab)
+  - [Review Service Mesh Monitoring](#review-service-mesh-monitoring)
+  - [Explore Kiali](#explore-kiali)
+  - [Using Kiali](#using-kiali)
+    - [View Service Graph](#view-service-graph)
+    - [Explore Service](#explore-service)
+    - [Exploring Workload](#exploring-workload)
+  - [Distributed Tracing](#distributed-tracing)
+  - [Next Topic](#next-topic)
+
+<!-- /TOC -->
+
 ## Review Service Mesh Monitoring
 
 At some point when you are developing your microservices architecture, you may want to visualize what is happening in your service mesh. You may have questions like “Which service is connected to which other service?” and “How much traffic goes to each microservice?” But because of the loosely tied nature of microservices architectures, these questions can be difficult to answer.

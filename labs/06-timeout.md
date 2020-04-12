@@ -1,4 +1,15 @@
 # Control Traffic with Timeout
+
+<!-- TOC -->
+
+- [Control Traffic with Timeout](#control-traffic-with-timeout)
+  - [Setup](#setup)
+- [Virtual Service](#virtual-service)
+  - [Cleanup](#cleanup)
+  - [Next Topic](#next-topic)
+
+<!-- /TOC -->
+
 ## Setup
 
 Currently backend v2 is set to delay response in 6 sec. We will set backend virtual service to wait for 3 sec (timeout 3 sec).  Frontend will received HTTP response with Gateway Timeout (504) if elapsed time is longer than timeout period.

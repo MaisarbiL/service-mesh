@@ -2,6 +2,16 @@
 
 Istio sidecar can validate JWT token as defined by RFC 7519. You can check more detail in OpenID connect 1.0 (OIDC) and OAuth 2.0
 
+<!-- TOC -->
+
+- [Secure Service with JWT Authentication](#secure-service-with-jwt-authentication)
+  - [Setup](#setup)
+  - [Authentication Policy](#authentication-policy)
+  - [Test](#test)
+  - [Clean Up](#clean-up)
+  - [Next Topic](#next-topic)
+
+<!-- /TOC -->
 
 ## Setup
 
@@ -122,6 +132,7 @@ oc delete -f istio-files/frontend-gateway.yml -n $USERID
 oc delete -f istio-files/virtual-service-frontend.yml -n $USERID
 
 ```
+
 ## Next Topic
 
 [Rate Limits](./10-rate-limits.md)

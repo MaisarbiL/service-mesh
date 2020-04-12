@@ -1,4 +1,19 @@
 # Microservices Deployment Lab
+
+<!-- TOC -->
+
+- [Microservices Deployment Lab](#microservices-deployment-lab)
+  - [Frontend and Backend app](#frontend-and-backend-app)
+  - [Deploy Frontend and Backend app](#deploy-frontend-and-backend-app)
+    - [Deploy Applications](#deploy-applications)
+    - [OpenShift Developer Console](#openshift-developer-console)
+    - [Test Appliation](#test-appliation)
+  - [Next Topic](#next-topic)
+
+<!-- /TOC -->
+
+## Frontend and Backend app
+
 Deploy microservices applications to OpenShift Container Platform 
 Observe automatic injection of Service Mesh sidecar into each microservice
 
@@ -55,6 +70,7 @@ Review configuration of backend v1 and v2.
   ...
   
   ```
+
 ### Deploy Applications
 
 ```
