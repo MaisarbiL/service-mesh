@@ -24,13 +24,11 @@ Configure service mesh gateway to control traffic that entering mesh.
 
 Deploy frontend v2 and remove backend v2
 
-```
-
+```bash
 oc apply -f ocp/frontend-v2-deployment.yml -n $USERID
 oc delete -f ocp/backend-v2-deployment.yml -n $USERID
 watch oc get pods -n $USERID 
-# or using oc get pods -w -n $USERID
-
+#Or using oc get pods -w -n $USERID
 ```
 
 ## Istio Gateway
@@ -39,18 +37,14 @@ Review the following Istio's Gateway rule configuration file [frontend-gateway.y
 
 Run oc apply command to create Istio Gateway.
 
-```
-
+```bash
 oc apply -f istio-files/frontend-gateway.yml -n $USERID
-
 ```
 
 Sample outout
 
-```
-
+```bash
 gateway.networking.istio.io/frontend-gateway created
-
 ```
 
 <!-- **Remark: You can also using [Kiali Console to create Gateway](#create-gateway-using-kiali-console)** -->
@@ -66,25 +60,20 @@ Review the following Istio's destination rule configuration file [destination-ru
 
 Run oc apply command to create Istio Gateway.
 
-```
-
+```bash
 oc apply -f istio-files/destination-rule-frontend-v1-v2.yml -n $USERID
-
 ```
 
 Sample outout
 
-```
-
+```bash
 destinationrule.networking.istio.io/frontend created
-
 ```
 
 ### Virtual Service
 Review the following Istio's  virtual service configuration file [virtual-service-frontend-header-foo-bar-to-v1.yml](../istio-files/virtual-service-frontend-header-foo-bar-to-v1.yml) to routing request to v1 if request container header name foo with value bar
 
-```
-...
+```yaml
 - match:
     - headers:
         foo:
@@ -93,23 +82,18 @@ Review the following Istio's  virtual service configuration file [virtual-servic
     - destination:
         host: frontend
         subset: v1
-...
 ```
 
 Run oc apply command to apply Istio virtual service policy.
 
-```
-
+```bash
 oc apply -f istio-files/virtual-service-frontend-header-foo-bar-to-v1.yml -n $USERID
-
 ```
 
 Sample output
 
-```
-
+```bash
 virtualservice.networking.istio.io/frontend created
-
 ```
 <!-- ## Create Gateway using Kiali Console
 Login to the Kiali web console. Select "Services" on the left menu. Then select frontend service
@@ -129,34 +113,27 @@ Login to the Kiali web console. Select "Services" on the left menu. Then select 
 
 Get URL of Istio Gateway and set to environment variable by using following command
 
-```
-
+```bash
 export GATEWAY_URL=$(oc -n $USERID-istio-system get route istio-ingressgateway -o jsonpath='{.spec.host}')
-
 ```
 
 Verify that environment variable GATEWAY is set correctly.
 
-```
-
+```bash
 echo $GATEWAY_URL
 
 ```
 
 Sample output
 
-```
-
+```bash
 istio-ingressgateway-user1-istio-system.apps.cluster-bkk77-eeb3.bkk77-eeb3.example.opentlc.com
-
 ```
 
 Test with cURL by setting header name foo with value bar. Response will always from Frontend v1
 
-```
-
+```bash
 curl -v -H foo:bar $GATEWAY_URL
-
 ```
 
 Check for header foo in HTTP request
@@ -165,34 +142,27 @@ Check for header foo in HTTP request
 
 Sample outout
 
-```
-
+```bash
 Frontend version: v1 => [Backend: http://backend:8080, Response: 200, Body: Backend version:v1, Response:200, Host:backend-v1-797cf7f7b4-b9lnh, Status:200, Message: Hello, World]
-
 ```
 
 Test again witout specified parameter -H. Response will always from Frontend v2
 
 Sample outout
 
-```
-
+```bash
 Frontend version: v2 => [Backend: http://backend:8080, Response: 200, Body: Backend version:v1, Response:200, Host:backend-v1-797cf7f7b4-b9lnh, Status:200, Message: Hello, World]
-
 ```
 
 You can also run script [run-50-foo-bar.sh](../scripts/run-50-foo-bar.sh) to generate round-robin request between frontend-v1 and frontend-v2
 
-```
-
+```bash
 scripts/run-50-foo-bar.sh
-
 ```
 
 Sample output
 
-```
-
+```bash
 ...
 Frontend version: v2
 Frontend version: v1
@@ -200,7 +170,6 @@ Frontend version: v2
 Frontend version: v1
 Frontend version: v2
 ...
-
 ```
 
 Kiali Graph show that requests are from ingress gateway. (Comparing with "Unknown" from previous lab)
@@ -214,49 +183,42 @@ Fault injection is strategy to test resiliency of your service.
 
 We will remove frontend v2 and update destination rule to not included frontend v2 and apply virtual service with fault injection when header foo is equal to bar
 
-```
-
+```bash
 oc apply -f istio-files/destination-rule-frontend.yml -n ${USERID}
 oc apply -f istio-files/virtual-service-frontend-fault-inject.yml -n $USERID
 oc delete -f ocp/frontend-v2-deployment.yml -n ${USERID}
 watch oc get pods -n ${USERID}
-
 ```
 
 Check virtual service with fault injection
 
-```
-
+```yaml
 ...
 - fault:
       abort:
-        # Return HTTP 500 for every request
+        #Return HTTP 500 for every request
         httpStatus: 500
         percentage:
           value: 100
-    # When header foo = bar
+    #When header foo = bar
     match:
     - headers:
         foo:
           exact: bar
 ...
-
 ```
 
 ## Test
 
 You can use previous cURL command for test fault injection.
 
-```
-
+```bash
 curl -v -H foo:bar  $GATEWAY_URL
-
 ```
 
 Sample output
 
-```
-
+```bash
 ...
 > User-Agent: curl/7.64.1
 > Accept: */*
@@ -267,21 +229,17 @@ Sample output
 < content-type: text/plain
 
 ...
-
 ```
 
 Test again with header foo not equal to bar
 
-```
-
+```bash
 curl -v -H foo:bar1  $GATEWAY_URL
-
 ```
 
 Sample output
 
-```
-
+```bash
 ...
 > User-Agent: curl/7.64.1
 > Accept: */*
@@ -289,18 +247,15 @@ Sample output
 >
 < HTTP/1.1 200 OK
 ...
-
 ```
 
 ## Cleanup
 Run oc delete command to remove Istio policy.
 
-```
-
+```bash
 oc delete -f istio-files/frontend-gateway.yml -n $USERID
 oc delete -f istio-files/virtual-service-frontend-header-foo-bar-to-v1.yml -n $USERID
 oc delete -f istio-files/destination-rule-frontend-v1-v2.yml -n $USERID
-
 ```
 
 ## Next Topic

@@ -7,7 +7,7 @@ Istio sidecar can validate JWT token as defined by RFC 7519. You can check more 
 - [Secure Service with JWT Authentication](#secure-service-with-jwt-authentication)
   - [Setup](#setup)
   - [Authentication Policy](#authentication-policy)
-  - [Test](#test)
+    - [Test](#test)
   - [Clean Up](#clean-up)
   - [Next Topic](#next-topic)
 
@@ -19,7 +19,7 @@ Create frontend and backend application (same as previous lab) along with Istio 
 
 We need istio gateway because we want frontend app to authenticate by JWT token.
 
-```
+```bash
 oc delete -f ocp/frontend-route.yml -n $USERID
 oc apply -f ocp/frontend-v1-deployment.yml -n $USERID
 oc apply -f ocp/frontend-service.yml -n $USERID
@@ -29,23 +29,19 @@ oc apply -f ocp/backend-service.yml -n $USERID
 oc apply -f istio-files/frontend-gateway.yml -n $USERID
 oc apply -f istio-files/virtual-service-frontend.yml -n $USERID
 watch oc get pods -n $USERID
-
 ```
 
 ## Authentication Policy
 
 Review [frontend-jwt-authentication.yml](../istio-files/frontend-jwt-authentication.yml)
 
-```
-...
+```yaml
 targets:
   - name: frontend
   origins:
   - jwt:
       issuer: "http://voravit.example.com:8080/auth/realms/quickstart"
       jwksUri: "https://gitlab.com/workshop6/service-mesh/raw/master/keycloak/jwks.json"
-...
-
 ```
 
 This authentication policy is configured with
@@ -56,10 +52,8 @@ This authentication policy is configured with
 
 Apply authentication policy 
 
-```
-
+```bash
 oc apply -f istio-files/frontend-jwt-authentication.yml -n $USERID
-
 ```
 
 For testing purpose, JWT token that satisfied with above requirments is genereated by Red Hat Single Sign-On (or its upstream Keycloak) and also set token validity period to 10 years (This is for simplied steps for test JWT. Normally, default validity duration of token is 1 minutes)
@@ -72,65 +66,53 @@ Following show decoded JWT token. Check for iss that is same value as issuer in 
 
 ![JWT Decoded](../images/jwt-decoded.png)
 
-## Test
+### Test
 
 JWT authentication is specified in HTTP header as follow.
 
-```
-
+```bash
 Authorization: Bearer <token>
-
 ```
 
 Test with token which issue from invalid issuer.
 
-```
-
+```bash
 GATEWAY_URL=$(oc get route istio-ingressgateway -n $USERID-istio-system -o jsonpath='{.spec.host}')
 TOKEN=$(cat keycloak/jwt-wrong-realm.txt)
 curl -v --header "Authorization: Bearer $TOKEN" $GATEWAY_URL
-
 ```
 
 Sample output
 
-```
-
+```bash
 ....
 < HTTP/1.1 401 Unauthorized
 ...
 ...
 Origin authentication failed.* Closing connection 0
-
 ```
 
 Test again with valid JWT token
 
-```
-
+```bash
 TOKEN=$(cat keycloak/jwt.txt)
 curl --header "Authorization: Bearer $TOKEN" $GATEWAY_URL
-
 ```
 
 With valid JWT token, you will get response from Frontend app.
 
-```
-
+```bash
 Frontend version: v1 => [Backend: http://backend:8080, Response: 200, Body: Backend version:v2, Response:200, Host:backend-v2-7699759f8f-8pxj8, Status:200, Message: Hello, World]
-
 ```
 
 ## Clean Up
 
 Run oc delete command to remove Istio policy.
 
-```
-
+```bash
 oc delete -f istio-files/frontend-jwt-authentication.yml -n $USERID
 oc delete -f istio-files/frontend-gateway.yml -n $USERID
 oc delete -f istio-files/virtual-service-frontend.yml -n $USERID
-
 ```
 
 ## Next Topic

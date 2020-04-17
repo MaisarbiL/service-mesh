@@ -30,12 +30,10 @@ Kiali runs as a service together with Istio, and does not require any changes to
 
 Get the URL of the Kiali web console and set as an environment variable:
 
-```
-
+```bash
 export KIALI_URL=https://$(oc get route kiali -n $USERID-istio-system -o template --template='{{.spec.host}}')
 # Display the KIALI_URL URL:
 echo $KIALI_URL
-
 ```
 
 You can also get URL to access Kiali from Developer Console.
@@ -64,13 +62,13 @@ To show the capabilities of Kiali Graph, you need to generate some sample data. 
 
 Run following command on your terminal
 
-```
+```bash
 scripts/run-50.sh
 ```
 
 Sample output
 
-```
+```bash
 ...
 Backend:v1, Response Code: 200, Host:backend-v1-797cf7f7b4-b9lnh, Elapsed Time:1.552174 sec
 Backend:v2, Response Code: 200, Host:backend-v2-7d69c678b4-nrqmj, Elapsed Time:6.062042 sec
@@ -123,9 +121,9 @@ View Inbound/Outbound metrics by select Inbound and Outbound tab.
 
 Jaeger implement OpenTracing for tracing microservices. Sampling rate and data store of Jaeger Get the URL of the Jaeger Web console and set as an environment variable:
 
-```
+```bash
 export JAEGER_URL=https://$(oc get route jaeger -n $USERID-istio-system -o template --template='{{.spec.host}}')
-# Display the JAEGER_URL URL:
+#Display the JAEGER_URL URL:
 echo $JAEGER_URL
 ```
 
