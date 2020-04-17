@@ -63,6 +63,16 @@ To show the capabilities of Kiali Graph, you need to generate some sample data. 
 Run following command on your terminal
 
 ```bash
+#Set Environment Variables for Frontend's Route URL
+source scripts/get-urls.sh
+
+#Sample Output
+FRONTEND_URL=frontend-user1.apps.cluster-a5d0.a5d0.example.opentlc.com
+GATEWAY_URL=istio-ingressgateway-user1-istio-system.apps.cluster-a5d0.a5d0.example.opentlc.com
+KIALI_URL=kiali-user1-istio-system.apps.cluster-a5d0.a5d0.example.opentlc.com
+JAEGER_URL=jaeger-user1-istio-system.apps.cluster-a5d0.a5d0.example.opentlc.com
+
+#Loop requests to Frontend App
 scripts/run-50.sh
 ```
 
@@ -116,10 +126,13 @@ View Inbound/Outbound metrics by select Inbound and Outbound tab.
 
 ![Workload Inbound](../images/workload-inbound-metrics.png)
 
+Open Grafana to view metrics data
+
+![Grafana](../images/grafana.png)
 
 ## Distributed Tracing
 
-Jaeger implement OpenTracing for tracing microservices. Sampling rate and data store of Jaeger Get the URL of the Jaeger Web console and set as an environment variable:
+Jaeger implement OpenTracing for tracing microservices. Sampling rate and data store of Jaeger Get the URL of the Jaeger Web console and set as an environment variable or click Distributed Tracing on the left menu.
 
 ```bash
 export JAEGER_URL=https://$(oc get route jaeger -n $USERID-istio-system -o template --template='{{.spec.host}}')
@@ -127,7 +140,10 @@ export JAEGER_URL=https://$(oc get route jaeger -n $USERID-istio-system -o templ
 echo $JAEGER_URL
 ```
 
-Test Jaeger by input search criteria with Service name "frontend.<project>" and set operation to backend service
+
+Test Jaeger by input search criteria with Service name "frontend.<project>" and set operation to backend service.
+
+Notice that response time of Frontend app are separated into 2 groups one is around 6 sec and another one is around 1 sec. Because of our backend v2 configured with 6 sec delay.
 
 ![Jager Main Screen](../images/jaeger-main-screen.png)
 
@@ -136,10 +152,10 @@ You can drill down to each transaction
 ![Jaeger Drill Down](../images/jaeger-drill-down.png)
 
 
-Jaeger can be accessed via Kiali by left-hand panel Distributed Tracing.
+<!-- Jaeger can be accessed via Kiali by left-hand panel Distributed Tracing.
 Remark: You need to login to Jaeger at least once to make this menu accessicble.
 
-![Kiali Distributed Tracing](../images/kiali-distributed-tracing.png)
+![Kiali Distributed Tracing](../images/kiali-distributed-tracing.png) -->
 
 ## Next Topic
 [Traffic Management](./04-traffic-management.md)
