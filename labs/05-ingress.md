@@ -4,7 +4,7 @@
 
 - [Istio Gateway and Routing by HTTP header](#istio-gateway-and-routing-by-http-header)
   - [Setup](#setup)
-  - [Istio Gateway](#istio-gateway)
+  - [Istio Ingress Gateway](#istio-ingress-gateway)
   - [Routing by incoming HTTP header](#routing-by-incoming-http-header)
     - [Destination Rule](#destination-rule)
     - [Virtual Service](#virtual-service)
@@ -31,7 +31,7 @@ watch oc get pods -n $USERID
 #Or using oc get pods -w -n $USERID
 ```
 
-## Istio Gateway
+## Istio Ingress Gateway
 
 Review the following Istio's Gateway rule configuration file [frontend-gateway.yml](../istio-files/frontend-gateway.yml)  to create Istio Gateway.
 
