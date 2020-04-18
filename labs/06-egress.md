@@ -8,6 +8,7 @@
     - [ALLOW_ANY or REGISTRY_ONLY](#allowany-or-registryonly)
     - [Service Entry](#service-entry)
   - [Clean Up](#clean-up)
+  - [Next Topic](#next-topic)
 
 <!-- /TOC -->
 
@@ -102,3 +103,7 @@ Run oc delete command to remove Istio policy.
 oc delete -f istio-files/egress-serviceentry -n $USERID
 
 ```
+
+## Next Topic
+
+[Timeout](./07-timeout.md)

@@ -197,4 +197,4 @@ oc delete -f ocp/frontend-route.yml -n $USERID
 
 ## Next Topic
 
-[Secure with mTLS](./08-securing-with-mTLS.md)
+[Secure with mTLS](./09-securing-with-mTLS.md)

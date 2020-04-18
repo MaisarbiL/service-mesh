@@ -261,4 +261,4 @@ oc delete -f istio-files/frontend-gateway.yml -n $USERID
 
 ## Next Topic
 
-[JWT Authentication](./09-jwt-authentication.md)
+[JWT Authentication](./10-jwt-authentication.md)

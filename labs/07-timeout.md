@@ -123,4 +123,4 @@ oc delete -f istio-files/destination-rule-backend-v1-v2.yml -n $USERID
 
 ## Next Topic
 
-[Circuit Breaker](./07-circuit-breaker.md)
+[Circuit Breaker](./08-circuit-breaker.md)

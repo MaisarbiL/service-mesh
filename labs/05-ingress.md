@@ -260,4 +260,4 @@ oc delete -f istio-files/destination-rule-frontend-v1-v2.yml -n $USERID
 
 ## Next Topic
 
-[Timeout](./06-timeout.md)
+[Egress](./06-gress.md)
