@@ -36,18 +36,20 @@ watch oc get pods -n $USERID
 Review [frontend-jwt-authentication.yml](../istio-files/frontend-jwt-authentication.yml)
 
 ```yaml
-targets:
+spec:
+  targets:
   - name: frontend
   origins:
   - jwt:
-      issuer: "http://voravit.example.com:8080/auth/realms/quickstart"
+      issuer: "http://localhost:8080/auth/realms/quickstart"
       jwksUri: "https://gitlab.com/workshop6/service-mesh/raw/master/keycloak/jwks.json"
+  principalBinding: USE_ORIGIN
 ```
 
 This authentication policy is configured with
 
 * Target service is frontend
-* Issuer (iss) must be http://voravit.example.com:8080/auth/realms/quickstart
+* Issuer (iss) must be http://localhost:8080/auth/realms/quickstart
 * URL of the provider’s public key set to validate signature of the JWT is located at https://gitlab.com/workshop6/service-mesh/raw/master/keycloak/jwks.json
 
 Apply authentication policy 
