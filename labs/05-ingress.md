@@ -29,6 +29,12 @@ oc apply -f ocp/frontend-v2-deployment.yml -n $USERID
 oc delete -f ocp/backend-v2-deployment.yml -n $USERID
 watch oc get pods -n $USERID 
 #Or using oc get pods -w -n $USERID
+#Sample Output
+NAME                           READY   STATUS              RESTARTS   AGE
+backend-v1-989c648f4-klsvl     2/2     Running             0          37m
+backend-v2-549bbcbdd6-shw2j    0/2     Terminating         0          37m
+frontend-v1-77b8699f6d-6vd56   2/2     Running             0          37m
+frontend-v2-5c4bf794bd-vnjk6   0/2     ContainerCreating   0          13s
 ```
 
 ## Istio Ingress Gateway
@@ -174,8 +180,11 @@ Frontend version: v2
 
 Kiali Graph show that requests are from ingress gateway. (Comparing with "Unknown" from previous lab)
 
-![KIali Graph with Ingress](../images/kiali-graph-ingress.png)
+![Kiali Graph with Ingress](../images/kiali-graph-ingress.png)
 
+Check virtual service configuration 
+
+![Kiali Conditional Routing Rule](../images/kiali-conditional-routing-rule.png)
 
 ## Fault Injection
 
@@ -207,6 +216,10 @@ Check virtual service with fault injection
           exact: bar
 ...
 ```
+
+Check virtual service configuration in Kiali console
+
+![Kiali Fault Injection](..images/../../images/kiali-fault-injection.png)
 
 ## Test
 

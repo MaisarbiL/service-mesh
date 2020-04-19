@@ -204,9 +204,13 @@ Select Versioned app graph, Request percentage and enable animation.
 
 ![Kiali Graph 80-20](../images/kiali-graph-80-20.png)
 
-You can also check statistics of each service. From left menu Services, then select service e.g. Backend
+You can also check statistics of each service. From left menu Services, then select service e.g. backend-v1
 
 ![Kiali Backend Traffic](../images/kiali-backend-traffic.png)
+
+Select inbound metrics
+
+![Kiali Backend Inboud](../images/kiali-backend-inbound-metrics.png)
 
 
 ### Bonus: Play with Weight
@@ -286,7 +290,19 @@ Open anoter terminal to view backend-v3 log
 oc logs -f <backend-v3 pod> -c backend -n $USERID
 ```
 
-Using Kiali Web Console to view pod's log by select Workloads on left menu then select log
+Sample log output
+```log
+06:00:46 INFO  [co.ex.qu.BackendResource] (executor-thread-1) showResponse: false
+06:00:46 INFO  [co.ex.qu.BackendResource] (executor-thread-2) Get Version
+06:00:46 INFO  [co.ex.qu.BackendResource] (executor-thread-1) Return Code: 200
+06:00:46 INFO  [co.ex.qu.BackendResource] (executor-thread-1) Request to: http://localhost:8080/version
+06:00:46 INFO  [co.ex.qu.BackendResource] (executor-thread-1) showResponse: false
+06:00:46 INFO  [co.ex.qu.BackendResource] (executor-thread-2) Get Version
+06:00:46 INFO  [co.ex.qu.BackendResource] (executor-thread-1) Return Code: 200
+06:00:46 INFO  [co.ex.qu.BackendResource] (executor-thread-1) Request to: http://localhost:8080/version
+```
+
+Using Kiali Web Console to view pod's log by select  on left menu then select log
 
 ![view pod's log](../images/kiali-view-pod-log.png)
 
@@ -296,16 +312,16 @@ Run cURL to test that every request is sent to backend-v3 by checking log of bac
 curl $FRONTEND_URL
 ```
 
-Sample output
-
+Sample log output
 ```log
-
-11:27:06 INFO  [co.ex.qu.BackendResource] (executor-thread-2) Request to: http://localhost:8080/version
-11:27:06 INFO  [co.ex.qu.BackendResource] (executor-thread-11) Get Version
-11:27:06 INFO  [co.ex.qu.BackendResource] (executor-thread-2) Return Code: 200
-11:27:08 INFO  [co.ex.qu.BackendResource] (executor-thread-2) Request to: http://localhost:8080/version
-11:27:08 INFO  [co.ex.qu.BackendResource] (executor-thread-11) Get Version
-11:27:08 INFO  [co.ex.qu.BackendResource] (executor-thread-2) Return Code: 200
+06:00:46 INFO  [co.ex.qu.BackendResource] (executor-thread-1) showResponse: false
+06:00:46 INFO  [co.ex.qu.BackendResource] (executor-thread-2) Get Version
+06:00:46 INFO  [co.ex.qu.BackendResource] (executor-thread-1) Return Code: 200
+06:00:46 INFO  [co.ex.qu.BackendResource] (executor-thread-1) Request to: http://localhost:8080/version
+06:00:46 INFO  [co.ex.qu.BackendResource] (executor-thread-1) showResponse: false
+06:00:46 INFO  [co.ex.qu.BackendResource] (executor-thread-2) Get Version
+06:00:46 INFO  [co.ex.qu.BackendResource] (executor-thread-1) Return Code: 200
+06:00:46 INFO  [co.ex.qu.BackendResource] (executor-thread-1) Request to: http://localhost:8080/version
 ```
 
 

@@ -36,7 +36,7 @@ By default Istio allow request go outside Service Mesh. This configuration is in
 
 Check configmap **istio**
 ```bash
-c get configmap istio -n ${USERID}-istio-system -o jsonpath='{.data.mesh}' | grep "mode: ALLOW_ANY"
+oc get configmap istio -n ${USERID}-istio-system -o jsonpath='{.data.mesh}' | grep "mode: ALLOW_ANY"
 ```
 You will get output similar to this
 ```yaml
