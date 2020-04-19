@@ -18,6 +18,7 @@ Routing within Service Mesh can be controlled by using Virtual Service and Routi
   - [Test](#test)
   - [Bonus: Play with Weight](#bonus-play-with-weight)
 - [Dark Launch by Mirroring Traffic](#dark-launch-by-mirroring-traffic)
+- [Set Envoy Access Log](#set-envoy-access-log)
 - [Cleanup](#cleanup)
 - [Next Topic](#next-topic)
 
@@ -324,6 +325,41 @@ Sample log output
 06:00:46 INFO  [co.ex.qu.BackendResource] (executor-thread-1) Request to: http://localhost:8080/version
 ```
 
+## Set Envoy Access Log
+Envoy's access log can be printed to envoy (sidecar) standard output. This can be enabled by configure configmap **istio** in control plane project.
+
+```bash
+oc edit cm istio -n ${USERID}-istio-system
+#or run shell script
+scripts/envoy-log.sh
+```
+Set following attributes
+- *accessLogFile* set to /dev/stdout
+- *accessLogEncoding* set to TEXT or SJON
+- Edit *accessLogFormat* if you want custom log format
+
+Following show part of configmap
+
+```json
+# Set accessLogFile to empty string to disable access log.
+    accesLogFile: "/dev/stdout"
+# Set accessLogEncoding to JSON or TEXT to configure sidecar access log
+    accessLogEncoding: 'TEXT'
+```
+
+Check backend's access log by using oc logs command
+```bash
+oc logs -f -c istio-proxy -n ${USERID} $(oc get pods -n ${USERID} | grep backend | head -n 1 | awk '{print $1}')
+``` 
+Access log show as follow:
+```log
+[2020-04-19T09:18:53.014Z] "GET / HTTP/1.1" 200 - "-" "-" 0 100 736 734 "-" "-" "ed6632af-a733-9136-a549-50ee76195a84" "backend:8080" "127.0.0.1:8080" inbound|8080|http|backend.user1.svc.cluster.local - 10.131.0.55:8080 10.128.2.54:41020 - default
+[2020-04-19T09:18:53.024Z] "- - -" 0 - "-" "-" 697 402 5965 - "-" "-" "-" "-" "35.170.216.115:443" PassthroughCluster 10.131.0.55:32864 35.170.216.115:443 10.131.0.55:32862 - -
+```
+Each request contains 2 lines of log incoming request from application container (backend-v1) and outgoing request to httpbin.org
+- backend.user1.svc.cluster.local - 10.131.0.55:8080 => 10.131.0.55 is IP address of this pod itself.
+- 10.128.2.54:41020 => IP address of requester. That is frontend pod.
+- 35.170.216.115:443 => IP address of httpbin.org
 
 ## Cleanup
 
@@ -343,6 +379,11 @@ oc delete -f ocp/backend-v3-service.yml -n $USERID
 
 You can also remove Istio policy by using Kiali Console by select Istio Config menu on the left then select each configuration and select menu Action on the upper right of page. Then click Delete
 ![](../images/kiali-delete-policy.png)
+
+If you want to disable envoy's access log.
+```bash
+scripts/envoy-log-disable.sh
+```
 
 ## Next Topic
 
