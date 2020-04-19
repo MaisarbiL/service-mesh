@@ -3,7 +3,7 @@ COUNT=0
 MAX=50
 VERSION1=0
 VERSION2=0
-TARGET_URL=$GATEWAY_URL
+TARGET_URL=${GATEWAY_URL}
 while [ $COUNT -lt $MAX ];
 do
   OUTPUT=$(curl $TARGET_URL -s -w "Elapsed Time:%{time_total}")

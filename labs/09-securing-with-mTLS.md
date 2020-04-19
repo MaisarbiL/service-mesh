@@ -63,7 +63,8 @@ You can also check Kiali console that station does not have sidecar
 Test by using station pod to connect to backend pod
 
 ```bash
-oc exec -n $USERID $(oc get pod -n $USERID | grep station | cut -d " " -f1) -c frontend curl http://backend:8080 -n $USERID
+oc exec -n $USERID $(oc get pod -n $USERID | grep station | cut -d " " -f1) \
+curl http://backend:8080 -n $USERID
 
 #or
 
@@ -236,6 +237,8 @@ Test again with cURL
 
 ```bash
 curl $GATEWAY_URL
+#or
+scripts/run-50-gateway.sh
 ```
 
 Sample output
@@ -243,6 +246,9 @@ Sample output
 ```bash
 Frontend version: v1 => [Backend: http://backend:8080, Response: 200, Body: Backend version:v2,Response:200,Host:backend-v2-7655885b8c-rt4jz, Message: Hello World!!]
 ```
+Check Kiali Console
+
+![Kiali Graph Secure](../images/kiali-mtls-secure.png)
 
 ## Clean Up
 

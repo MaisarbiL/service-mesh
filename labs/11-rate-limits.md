@@ -1,12 +1,12 @@
-# Rate Limits
+# Rate Limits - (Deprecated)
 
 Istio can dynamically limit the traffic to a service and also can apply logic to determine that this limit will be applied or not based on attributes of incoming request e.g. HTTP header, source IP, etc and also able to specified destination.
 
 <!-- TOC -->
 
-- [Rate Limits](#rate-limits)
+- [Rate Limits - (Deprecated)](#rate-limits---deprecated)
   - [Setup](#setup)
-  - [Rate Limits](#rate-limits-1)
+  - [Rate Limits](#rate-limits)
     - [Test](#test)
   - [Clean Up](#clean-up)
   - [Congratulations. You just done all of our labs!!!!](#congratulations-you-just-done-all-of-our-labs)
@@ -84,7 +84,7 @@ spec:
 Apply rate limits policy.
 
 ```bash
-oc apply -f istio-files/frontend-rate-limits.yml -n $USERID
+oc apply -f istio-files/frontend-rate-limits.yml -n $USERID-istio-system
 ```
 
 

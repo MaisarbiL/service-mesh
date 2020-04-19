@@ -47,21 +47,17 @@ Scale pod to 2 by click upper arrow icon.
 
 ![scale up](../images/openshift-dev-console-scaleup.png)
 
-
 We will force one backend-v1 pod to return 504. This can be done by rsh into pod the curl to /stop (backend-v1 will always return 504 after receiving /stop. This is for demo)
 
 Select one pod and connect to pod's terminal by using following oc command or OpenShift Web Console.
 
 ```bash
 oc exec -n $USERID -c backend $(oc get pod -n $USERID | grep -m1 backend | cut -d " " -f1) -- curl -s http://localhost:8080/stop
-
 #or
-
 oc exec -n $USERID  -c backend <pod name>  -- curl -s  http://localhost:8080/stop
 ```
 
 Sample output
-
 ```bash
 Backend version:v1, Response:200, Host:backend-v1-6ddf9c7dcf-sqxqz , Status:200, Message: Liveness: false
 

@@ -90,7 +90,7 @@ scripts/run-50.sh
 ```
 
 Sample output
-```bash
+```log
 ...
 Backend:v1, Response Code: 200, Host:backend-v1-6ddf9c7dcf-pppzc, Elapsed Time:0.774024 sec
 Backend:, Response Code: 504, Host:, Elapsed Time:3.193873 sec
@@ -114,11 +114,9 @@ Check Graph in Kiali Console with Response time.
 ## Cleanup
 Run oc delete command to remove Istio policy.
 
-```
-
+```bash
 oc delete -f istio-files/virtual-service-backend-v1-v2-80-20.yml -n $USERID
 oc delete -f istio-files/destination-rule-backend-v1-v2.yml -n $USERID
-
 ```
 
 ## Next Topic
