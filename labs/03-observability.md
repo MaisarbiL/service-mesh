@@ -151,7 +151,9 @@ You can drill down to each transaction
 
 ![Jaeger Drill Down](../images/jaeger-drill-down.png)
 
+Distributed tracing can be accessed via Kiali by menu Services => Select service => Traces
 
+![Kiali Distributed Tracing](../images/kiali-distributed-tracing-from-service-menu.png)
 <!-- Jaeger can be accessed via Kiali by left-hand panel Distributed Tracing.
 Remark: You need to login to Jaeger at least once to make this menu accessicble.
 
