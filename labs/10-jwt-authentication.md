@@ -26,9 +26,9 @@ oc apply -f ocp/frontend-service.yml -n $USERID
 oc apply -f ocp/backend-v1-deployment.yml -n $USERID
 oc apply -f ocp/backend-v2-deployment.yml -n $USERID
 oc apply -f ocp/backend-service.yml -n $USERID
-oc apply -f istio-files/frontend-gateway.yml -n $USERID
 oc apply -f istio-files/virtual-service-frontend.yml -n $USERID
 watch oc get pods -n $USERID
+oc apply -f istio-files/frontend-gateway.yml -n $USERID
 ```
 
 ## Authentication Policy
@@ -39,11 +39,20 @@ Review [frontend-jwt-authentication.yml](../istio-files/frontend-jwt-authenticat
 spec:
   targets:
   - name: frontend
+    ports:
+    - number: 8080
+  #If Frontend also enabled with mTLS. You need to specified peers with mtls
+  #peers:
+  #- mtls: {}
   origins:
   - jwt:
       issuer: "http://localhost:8080/auth/realms/quickstart"
+      audiences:
+      - "curl"
       jwksUri: "https://gitlab.com/workshop6/service-mesh/raw/master/keycloak/jwks.json"
-  principalBinding: USE_ORIGIN
+      triggerRules:
+      - excludedPaths:  
+        - exact: /version
 ```
 
 This authentication policy is configured with
@@ -55,7 +64,7 @@ This authentication policy is configured with
 Apply authentication policy 
 
 ```bash
-oc apply -f istio-files/frontend-jwt-authentication.yml -n $USERID
+oc apply -f istio-files/frontend-jwt -n $USERID
 ```
 
 For testing purpose, JWT token that satisfied with above requirments is genereated by Red Hat Single Sign-On (or its upstream Keycloak) and also set token validity period to 10 years (This is for simplied steps for test JWT. Normally, default validity duration of token is 1 minutes)
