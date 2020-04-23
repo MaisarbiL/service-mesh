@@ -28,4 +28,4 @@ oc delete -f istio-files/virtual-service-backend.yml -n ${USERID}
 oc delete -f istio-files/virtual-service-frontend-fault-inject.yml -n ${USERID}
 oc delete -f istio-files/virtual-service-frontend-header-foo-bar-to-v1.yml -n ${USERID}
 oc delete -f istio-files/virtual-service-frontend.yml -n ${USERID}
-scripts/allow-all-mode.sh
+scripts/allow-any-mode.sh
