@@ -336,7 +336,7 @@ scripts/envoy-log.sh
 Set following attributes
 - *accessLogFile* set to /dev/stdout
 - *accessLogEncoding* set to TEXT or SJON
-- Edit *accessLogFormat* if you want custom log format
+- Edit *accessLogFormat* if you want custom log format. Check [Envoy Document](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log#format-rules) for more details.
 
 Following show part of configmap
 
