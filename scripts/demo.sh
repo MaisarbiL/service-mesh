@@ -66,5 +66,9 @@ set -x
 TOKEN=$(cat keycloak/jwt.txt)
 curl --header "Authorization: Bearer $TOKEN" $GATEWAY_URL
 set +x
+banner "Route will not work because mTLS is required"
+set -x
+TOKEN=$(cat keycloak/jwt.txt)
+curl --header "Authorization: Bearer $TOKEN" $FRONTEND_URL
 banner "Tear down..."
 scripts/teardown.sh 2>/dev/null
