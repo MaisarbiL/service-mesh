@@ -54,17 +54,17 @@ oc apply -f istio-files/destination-rule-frontend-mtls.yml -n $USERID
 oc apply -f istio-files/virtual-service-frontend.yml -n $USERID
 oc apply -f istio-files/frontend-gateway.yml -n $USERID
 siege -c 1 ${GATEWAY_URL}
-# banner "enable JWT Authentication"
-# oc apply -f istio-files/frontend-jwt-authentication.yml -n $USERID
-# banner "Test with invalid JWT Token"
-# set -x
-# TOKEN=$(cat keycloak/jwt-wrong-realm.txt)
-# curl --header "Authorization: Bearer $TOKEN" $GATEWAY_URL
-# set +x
-# banner "Test with vilid JWT Token"
-# set -x
-# TOKEN=$(cat keycloak/jwt.txt)
-# curl --header "Authorization: Bearer $TOKEN" $GATEWAY_URL
-# set +x
+banner "enable JWT Authentication"
+oc apply -f istio-files/frontend-jwt-with-mtls.yml -n $USERID
+banner "Test with invalid JWT Token"
+set -x
+TOKEN=$(cat keycloak/jwt-wrong-realm.txt)
+curl --header "Authorization: Bearer $TOKEN" $GATEWAY_URL
+set +x
+banner "Test with vilid JWT Token"
+set -x
+TOKEN=$(cat keycloak/jwt.txt)
+curl --header "Authorization: Bearer $TOKEN" $GATEWAY_URL
+set +x
 banner "Tear down..."
 scripts/teardown.sh 2>/dev/null
