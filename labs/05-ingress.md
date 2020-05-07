@@ -18,7 +18,16 @@
 
 Configure service mesh gateway to control traffic that entering mesh.
 
-![Microservice with Ingress Diagram](../images/microservices-with-ingress.png)
+<!-- ![Microservice with Ingress Diagram](../images/microservices-with-ingress.png) -->
+```mermaid
+graph TD;
+    Client--> Istio_Ingress
+    Istio_Ingress-->|If header foo=bar|Frontend_v1
+    Istio_Ingress-->|If header foo!=bar|Frontend_v2
+    Frontend_v1-->Backend_v1;
+    Frontend_v2-->Backend_v1;
+    Backend_v1-->|External App|https://httpbin.org/status/200
+```
 
 ## Setup
 

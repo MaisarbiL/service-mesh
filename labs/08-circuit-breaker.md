@@ -20,13 +20,21 @@ In our lab, we will simulate that one pod of backend service has some error. We 
 
 Setup microservices apps by remove backend-v2 and scale backend-v1 to 3 pods. 
 
-![microservices circuit brekaer](../images/microservices-circuit-breaker.png)
+<!-- ![microservices circuit brekaer](../images/microservices-circuit-breaker.png) -->
+```mermaid
+graph TD;
+    Client--> OpenShift_Route
+    OpenShift_Route-->Frontend_v1
+    Frontend_v1-->|Circuit Breaker and Pool Ejection|Backend_v1;
+    Backend_v1-->|External App|https://httpbin.org/status/200
+```
+
+Crete deployment
 
 ```bash
 oc delete -f ocp/backend-v2-deployment.yml -n $USERID
 oc scale deployment backend-v1 --replicas=2 -n $USERID
 watch oc get pods -n $USERID
-
 #or 
 #oc get pods -w -n $USERID
 #Wait until all backend-v1 pods status are Runnings and all container in pods are ready (2/2)

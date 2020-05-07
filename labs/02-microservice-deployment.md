@@ -19,8 +19,16 @@ Observe automatic injection of Service Mesh sidecar into each microservice
 
 There are two microservices in this lab that you will deploy to OpenShift. In a later lab of this course, you will manage the interactions between these microservices using Red Hat OpenShift Service Mesh.
 
-![Microservice Diagram](../images/microservices-initial.png)
-
+<!-- ![Microservice Diagram](../images/microservices-initial.png) -->
+```mermaid
+graph TD;
+    Client--> OpenShift_Route
+    OpenShift_Route-->Frontend_v1
+    Frontend_v1-->Backend_v1;
+    Frontend_v1-->Backend_v2;
+    Backend_v1-->|External App|https://httpbin.org/status/200
+    Backend_v2-->|External App|https://httpbin.org/delay/5
+```
 
 ## Deploy Frontend and Backend app
 You start by deploying the catalog service to OpenShift. The sidecar proxy is automatically injected by annotated deployment with 

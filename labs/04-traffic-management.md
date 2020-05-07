@@ -38,7 +38,16 @@ You do so via routing mechanisms available from OpenShift. You then make use of 
 
 We can experiment with Istio routing rules by using our microservices application which contains 2 version of backend
 
-![Backend v1 v2 80% 20%](../images/microservices-with-v1-v2-80-20.png)
+<!-- ![Backend v1 v2 80% 20%](../images/microservices-with-v1-v2-80-20.png) -->
+```mermaid
+graph TD;
+    Client--> OpenShift_Route
+    OpenShift_Route-->Frontend_v1
+    Frontend_v1-->|Weight 80%|Backend_v1;
+    Frontend_v1-->|Weight 20%|Backend_v2;
+    Backend_v1-->|External App|https://httpbin.org/status/200
+    Backend_v2-->|External App|https://httpbin.org/delay/5
+```
 
 ### Destination Rule
 
