@@ -4,9 +4,9 @@ metadata:
   name: frontend-virtual-service
 spec:
   hosts:
-  - '*'
+  - frontend.apps.cluster-ada4.ada4.example.opentlc.com
   gateways:
-  - frontend-gateway
+  - frontend-gateway.user1-istio-system.svc.cluster.local
   http:
   - match:
     - headers:
