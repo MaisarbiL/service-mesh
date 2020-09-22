@@ -5,7 +5,7 @@
 - [Egress Gateway](#egress-gateway)
   - [Setup](#setup)
   - [Istio Egress Gateway](#istio-egress-gateway)
-    - [ALLOW_ANY or REGISTRY_ONLY](#allowany-or-registryonly)
+    - [ALLOW_ANY or REGISTRY_ONLY](#allow_any-or-registry_only)
     - [Service Entry](#service-entry)
   - [Clean Up](#clean-up)
   - [Next Topic](#next-topic)
@@ -84,9 +84,8 @@ Apply [egress-serviceentry.yml](../istio-files/egress-serviceentry.yml) and test
 ```bash
 oc apply -f istio-files/egress-serviceentry.yml -n $USERID
 curl ${FRONTEND_URL}
-# Check that Response code is 200
 ```
-Run [run-50.sh](../scripts/run-50.sh) and Check Kiali Console Graph
+Run [run-50.sh](../scripts/run-20.sh) and Check Kiali Console Graph
 
 ![Kiali Console Egress ServiceEntry](../images/kiali-console-egress-service-entry.png)
 
