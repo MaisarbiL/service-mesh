@@ -1,13 +1,12 @@
 # Secure Service with JWT Authentication
 
-Istio sidecar can validate JWT token as defined by RFC 7519. You can check more detail in OpenID connect 1.0 (OIDC) and OAuth 2.0
-
 <!-- TOC -->
 
 - [Secure Service with JWT Authentication](#secure-service-with-jwt-authentication)
   - [Setup](#setup)
 
 <!-- /TOC -->
+Istio sidecar can validate JWT token as defined by RFC 7519. You can check more detail in OpenID connect 1.0 (OIDC) and OAuth 2.0
 
 ## Setup
 
@@ -29,7 +28,7 @@ oc apply -f istio-files/frontend-gateway.yml -n $USERID
 
 ## Authentication Policy
 
-Review [frontend-jwt-authentication.yml](../istio-files/frontend-jwt-authentication.yml)
+Review [frontend-jwt-with-mtls.yml.yml](../istio-files/frontend-jwt-with-mtls.yml)
 
 ```yaml
 spec:
@@ -37,9 +36,9 @@ spec:
   - name: frontend
     ports:
     - number: 8080
-  #If Frontend also enabled with mTLS. You need to specified peers with mtls
-  #peers:
-  #- mtls: {}
+  #Remove peer with mtls if Frontend is not enabled with mTLS
+  peers:
+  - mtls: {}
   origins:
   - jwt:
       issuer: "http://localhost:8080/auth/realms/quickstart"
