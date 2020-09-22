@@ -34,6 +34,8 @@ Crete deployment
 ```bash
 oc delete -f ocp/backend-v2-deployment.yml -n $USERID
 oc scale deployment backend-v1 --replicas=2 -n $USERID
+oc apply -f istio-files/destination-rule-backend-v1.yml -n $USERID
+oc apply -f istio-files/virtual-service-backend.yml -n $USERID
 watch oc get pods -n $USERID
 #or 
 #oc get pods -w -n $USERID
@@ -57,17 +59,43 @@ Scale pod to 2 by click upper arrow icon.
 
 We will force one backend-v1 pod to return 504. This can be done by rsh into pod the curl to /stop (backend-v1 will always return 504 after receiving /stop. This is for demo)
 
-Select one pod and connect to pod's terminal by using following oc command or OpenShift Web Console.
+
+Envoy is check for response code 503 and retry automatically. We will force one of backend's pod to return 503 by run following command.
 
 ```bash
+oc exec -n $USERID -c backend $(oc get pod -n $USERID | grep -m1 backend | cut -d " " -f1) -- curl -s http://localhost:8080/not_ready
+```
+
+Verify that pod in previous step will return 503
+```bash
+oc exec -n $USERID -c backend $(oc get pod -n $USERID | grep -m1 backend | cut -d " " -f1) -- curl -v -s http://localhost:8080
+```
+Sample output
+```
+...
+< HTTP/1.1 503 Service Unavailable
+< Content-Encoding: text/plain
+< Content-Length: 126
+< Content-Type: text/plain;charset=UTF-8
+...
+```
+Test with [run-50.sh](../scripts/run-50.sh). All response will be 200 OK
+
+
+Set that backend pod to return 504 instead of 503
+
+```bash
+oc exec -n $USERID -c backend $(oc get pod -n $USERID | grep -m1 backend | cut -d " " -f1) -- curl -s http://localhost:8080/ready
 oc exec -n $USERID -c backend $(oc get pod -n $USERID | grep -m1 backend | cut -d " " -f1) -- curl -s http://localhost:8080/stop
 #or
+oc exec -n $USERID  -c backend <pod name>  -- curl -s  http://localhost:8080/ready
 oc exec -n $USERID  -c backend <pod name>  -- curl -s  http://localhost:8080/stop
 ```
 
 Sample output
 ```bash
-Backend version:v1, Response:200, Host:backend-v1-6ddf9c7dcf-sqxqz , Status:200, Message: Liveness: false
+Backend version:v1, Response:200, Host:backend-v1-6ddf9c7dcf-sqxqz, Status:200, Message: Readiness: true
+Backend version:v1, Response:200, Host:backend-v1-6ddf9c7dcf-sqxqz, Status:200, Message: Liveness: false
 
 ```
 
