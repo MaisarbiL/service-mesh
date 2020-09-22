@@ -1,0 +1,15 @@
+apiVersion: "security.istio.io/v1beta1"
+kind: "AuthorizationPolicy"
+metadata:
+  name: rbac-allow-frontend-to-backend
+spec:
+  selector:
+    matchLabels:
+      app: backend
+  rules:
+  - from:
+    - source:
+        principals: ["cluster.local/ns/user1"]
+    to:
+    - operation:
+        methods: ["GET"]
