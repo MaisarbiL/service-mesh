@@ -1,5 +1,5 @@
 #!/bin/sh
 while [ 1 ];
 do
-curl ${GATEWAY_URL};echo ""
+curl -w"\n" ${FRONTEND_URL}
 done

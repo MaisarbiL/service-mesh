@@ -8,6 +8,9 @@ banner (){
 }
 echo "Deploy Demo Apps on project ${USERID}"
 scripts/deploy.sh
+echo "Deploy Control Plane"
+scripts/create-control-plane.sh
+
 source scripts/get-urls.sh
 banner "Press enter to produce some workload. Check Kiali and Jeager Console"
 siege -c 1 ${FRONTEND_URL}
