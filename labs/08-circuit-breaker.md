@@ -65,6 +65,21 @@ Envoy is check for response code 503 and retry automatically. We will force one 
 ```bash
 oc exec -n $USERID -c backend $(oc get pod -n $USERID | grep -m1 backend | cut -d " " -f1) -- curl -s http://localhost:8080/not_ready
 ```
+Envoy also try to connect to another pod within same node if possible. Check deployment of backend-v1 and frontend-v1 for pod anti-affinity. Then frontend-v1 and backend-v1 will not scheduled to the same node.
+
+```yaml
+spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - backend
+            topologyKey: kubernetes.io/hostname
+```
 
 Verify that pod in previous step will return 503
 ```bash
