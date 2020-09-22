@@ -9,4 +9,4 @@ spec:
     - number: 8080
   peers:
   - mtls:
-      mode: PERMISSIVE
+      mode: STRICT
