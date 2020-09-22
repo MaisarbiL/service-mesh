@@ -5,11 +5,11 @@ Istio sidecar can validate JWT token as defined by RFC 7519. You can check more 
 <!-- TOC -->
 
 - [Secure Service with JWT Authentication](#secure-service-with-jwt-authentication)
-  - [Setup](#setup)
-  - [Authentication Policy](#authentication-policy)
-    - [Test](#test)
-  - [Clean Up](#clean-up)
-  - [Next Topic](#next-topic)
+    - [Setup](#setup)
+    - [Authentication Policy](#authentication-policy)
+        - [Test](#test)
+    - [Clean Up](#clean-up)
+    - [Next Topic](#next-topic)
 
 <!-- /TOC -->
 
@@ -64,7 +64,7 @@ This authentication policy is configured with
 Apply authentication policy 
 
 ```bash
-oc apply -f istio-files/frontend-jwt -n $USERID
+oc apply -f istio-files/frontend-jwt.yml -n $USERID
 ```
 
 For testing purpose, JWT token that satisfied with above requirments is genereated by Red Hat Single Sign-On (or its upstream Keycloak) and also set token validity period to 10 years (This is for simplied steps for test JWT. Normally, default validity duration of token is 1 minutes)
