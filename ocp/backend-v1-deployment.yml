@@ -27,6 +27,17 @@ spec:
       annotations:
         sidecar.istio.io/inject: "true"
     spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          #requiredDuringSchedulingRequiredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - frontend
+            topologyKey: kubernetes.io/hostname
       containers:
       - name: backend
         image: quay.io/voravitl/backend-native:v1

@@ -24,6 +24,16 @@ spec:
         app: frontend
         version: v1
     spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - backend
+            topologyKey: kubernetes.io/hostname
       containers:
       - name: frontend
         image: quay.io/voravitl/frontend-js:v1
