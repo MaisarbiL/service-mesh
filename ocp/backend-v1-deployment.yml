@@ -10,7 +10,7 @@ metadata:
     app.kubernetes.io/instance: backend
     app.kubernetes.io/name: java
     app.kubernetes.io/part-of: App-X
-    app.openshift.io/runtime: java
+    app.openshift.io/runtime: quarkus
     app.openshift.io/runtime-version: '8'
 spec:
   replicas: 1
@@ -43,5 +43,7 @@ spec:
             value: https://httpbin.org/status/200
           - name: APP_VERSION
             value: v1
+          - name: quarkus.log.console.color
+            value: 'false'
         ports:
         - containerPort: 8080

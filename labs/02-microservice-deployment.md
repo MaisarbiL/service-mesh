@@ -37,7 +37,7 @@ You start by deploying the catalog service to OpenShift. The sidecar proxy is au
 sidecar.istio.io/inject: "true"
 ```
 
-Check for annotation section in [deployment of backend v1](../ocp/backend-v1-deployment.yml)
+Check for annotation section in [deployment of backend v1](../ocp/backend-v1-deployment.yml) and [deployment of backend v2](../ocp/backend-v2-deployment.yml)
 
 ```yaml
 spec:
@@ -50,6 +50,8 @@ spec:
       annotations:
         sidecar.istio.io/inject: "true"
 ```
+
+Check for annotation section in [deployment of frontend v1](../ocp/frontend-v1-deployment.yml) that there is no **sidecar.istio.io/inject: "true"** in deployment file.
 
 Review configuration of backend v1 and v2. 
 * Backend v1 is configured to call https://httpbin.org/status/200 
@@ -71,6 +73,7 @@ Review configuration of backend v1 and v2.
 oc apply -f ocp/frontend-v1-deployment.yml -n $USERID
 oc apply -f ocp/frontend-service.yml -n $USERID
 oc apply -f ocp/frontend-route.yml -n $USERID
+oc patch deployment/frontend-v1 -p '{"spec":{"template":{"metadata":{"annotations":{"sidecar.istio.io/inject":"true"}}}}}' -n $USERID
 oc apply -f ocp/backend-v1-deployment.yml -n $USERID
 oc apply -f ocp/backend-v2-deployment.yml -n $USERID
 oc apply -f ocp/backend-service.yml -n $USERID

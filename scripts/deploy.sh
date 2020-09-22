@@ -2,6 +2,7 @@
 oc apply -f ocp/frontend-v1-deployment.yml -n $USERID
 oc apply -f ocp/backend-v1-deployment.yml -n $USERID
 oc apply -f ocp/backend-v2-deployment.yml -n $USERID
+oc patch deployment/frontend-v1 -p '{"spec":{"template":{"metadata":{"annotations":{"sidecar.istio.io/inject":"true"}}}}}' -n $USERID
 oc apply -f ocp/backend-service.yml -n $USERID
 #oc apply -f ocp/frontend-v2-deployment.yml -n $USERID
 oc apply -f ocp/frontend-service.yml -n $USERID
