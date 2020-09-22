@@ -24,6 +24,7 @@ oc apply -f ocp/frontend-route.yml -n $USERID
 oc apply -f ocp/backend-v1-deployment.yml -n $USERID
 oc apply -f ocp/backend-v2-deployment.yml -n $USERID
 oc apply -f ocp/backend-service.yml -n $USERID
+oc patch deployment frontend-v1 -p '{"spec":{"template":{"metadata":{"annotations":{"sidecar.istio.io/inject":"true"}}}}}' -n $USERID
 watch oc get pods -n $USERID
 ```
 
@@ -63,12 +64,8 @@ You can also check Kiali console that station does not have sidecar
 Test by using station pod to connect to backend pod
 
 ```bash
-oc exec -n $USERID $(oc get pod -n $USERID | grep station | cut -d " " -f1) \
-curl http://backend:8080 -n $USERID
-
-#or
-
-oc exec -n $USERID <station pod> curl http://backend:8080 -n $USERID
+oc exec -n $USERID $(oc get pod -n $USERID | grep station | cut -d " " -f1) -- \
+curl -s http://backend:8080 
 ```
 
 Sample Outout
@@ -79,7 +76,7 @@ Backend version:v1,Response:200,Host:backend-v1-6ddf9c7dcf-vlcr9, Message: Hello
 
 ## Enable Mutual TLS for Backend Service
 
-Review the following Istio's authenticaiton rule configuration file [authentication-backend-enable-mtls.yml](../istio-files/authentication-backend-enable-mtls.yml)  to enable authenticaion with following configuration.
+Review the following Istio's authenticaiton rule configuration file [authentication-backend-enable-mtls.yml](../istio-files/authentication-backend-enable-mtls.yml)  to enable STRICT mode with following configuration.
 
 ```yaml
 spec:
@@ -88,7 +85,8 @@ spec:
     ports:
     - number: 8080
   peers:
-  - mtls: {}
+  - mtls:
+      mode: STRICT
 ```
 
 Review the following Istio's destination rule configuration file [destination-rule-backend-v1-v2-mtls.yml](../istio-files/destination-rule-backend-v1-v2-mtls.yml)  to enable client side certification (Mutual TLS) with following configuration.
@@ -123,10 +121,6 @@ Test with oc exec again from station pod
 
 ```bash
 oc exec -n $USERID $(oc get pod -n $USERID | grep station | cut -d " " -f1) -- curl -s http://backend:8080
-
-#or
-
-oc exec -n $USERID <station pod> curl http://backend:8080
 ```
 
 Sample output
@@ -230,13 +224,16 @@ curl: (52) Empty reply from server
 This can be solved by create Istio Ingress Gateway and connect to frontend with Istio Ingress Gateway.
 
 ```bash
-oc apply -f istio-files/frontend-gateway.yml -n $USERID
+oc apply -f istio-files/frontend-gateway.yml -n $USERID-istio-system
+oc apply -f istio-files/virtual-service-frontend-with-gateway.yml -n $USERID
+oc delete -f istio-files/frontend-route.yml -n $USERID-istio-system
+oc apply -f istio-files/frontend-route.yml -n $USERID-istio-system
 ```
 
 Test again with cURL
 
 ```bash
-curl $GATEWAY_URL
+curl -v $GATEWAY_URL
 #or
 scripts/run-50-gateway.sh
 ```

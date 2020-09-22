@@ -1,5 +1,5 @@
-apiVersion: "authentication.istio.io/v1alpha1"
-kind: "Policy"
+apiVersion: authentication.istio.io/v1alpha1
+kind: Policy
 metadata:
   name: authentication-frontend-mtls
 spec:
@@ -8,4 +8,5 @@ spec:
     ports:
     - number: 8080
   peers:
-  - mtls: {}
+  - mtls:
+      mode: PERMISSIVE
