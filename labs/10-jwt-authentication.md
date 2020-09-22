@@ -5,11 +5,7 @@ Istio sidecar can validate JWT token as defined by RFC 7519. You can check more 
 <!-- TOC -->
 
 - [Secure Service with JWT Authentication](#secure-service-with-jwt-authentication)
-    - [Setup](#setup)
-    - [Authentication Policy](#authentication-policy)
-        - [Test](#test)
-    - [Clean Up](#clean-up)
-    - [Next Topic](#next-topic)
+  - [Setup](#setup)
 
 <!-- /TOC -->
 
@@ -19,7 +15,7 @@ Create frontend and backend application (same as previous lab) along with Istio 
 
 We need istio gateway because we want frontend app to authenticate by JWT token.
 
-```bash
+<!-- ```bash
 oc delete -f ocp/frontend-route.yml -n $USERID
 oc apply -f ocp/frontend-v1-deployment.yml -n $USERID
 oc apply -f ocp/frontend-service.yml -n $USERID
@@ -29,7 +25,7 @@ oc apply -f ocp/backend-service.yml -n $USERID
 oc apply -f istio-files/virtual-service-frontend.yml -n $USERID
 watch oc get pods -n $USERID
 oc apply -f istio-files/frontend-gateway.yml -n $USERID
-```
+``` -->
 
 ## Authentication Policy
 
@@ -64,7 +60,8 @@ This authentication policy is configured with
 Apply authentication policy 
 
 ```bash
-oc apply -f istio-files/frontend-jwt.yml -n $USERID
+oc delete -f istio-files/authentication-frontend-enable-mtls.yml -n $USERID
+oc apply -f istio-files/frontend-jwt-with-mtls.yml -n $USERID
 ```
 
 For testing purpose, JWT token that satisfied with above requirments is genereated by Red Hat Single Sign-On (or its upstream Keycloak) and also set token validity period to 10 years (This is for simplied steps for test JWT. Normally, default validity duration of token is 1 minutes)
@@ -88,7 +85,7 @@ Authorization: Bearer <token>
 Test with token which issue from invalid issuer.
 
 ```bash
-GATEWAY_URL=$(oc get route istio-ingressgateway -n $USERID-istio-system -o jsonpath='{.spec.host}')
+GATEWAY_URL=$(oc get route frontend -n $USERID-istio-system -o jsonpath='{.spec.host}')
 TOKEN=$(cat keycloak/jwt-wrong-realm.txt)
 curl -v --header "Authorization: Bearer $TOKEN" $GATEWAY_URL
 ```
@@ -116,6 +113,12 @@ With valid JWT token, you will get response from Frontend app.
 Frontend version: v1 => [Backend: http://backend:8080, Response: 200, Body: Backend version:v2, Response:200, Host:backend-v2-7699759f8f-8pxj8, Status:200, Message: Hello, World]
 ```
 
+Test excluded URI (/version) without Bearer token.
+
+```bash
+curl -v $GATEWAY_URL/version
+```
+
 ## Clean Up
 
 Run oc delete command to remove Istio policy.
@@ -126,7 +129,7 @@ oc delete -f istio-files/frontend-gateway.yml -n $USERID
 oc delete -f istio-files/virtual-service-frontend.yml -n $USERID
 ```
 
-## Next Topic
+<!-- ## Next Topic
 
-[Rate Limits](./10-rate-limits.md)
+[Rate Limits](./10-rate-limits.md) -->
 
