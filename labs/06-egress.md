@@ -99,7 +99,7 @@ Reconfigure istio configmap back to ALLOW_ANY
 
 Run oc delete command to remove Istio policy.
 ```bash
-oc delete -f istio-files/egress-serviceentry -n $USERID
+oc delete -f istio-files/egress-serviceentry.yml -n $USERID
 
 ```
 
