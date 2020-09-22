@@ -53,6 +53,11 @@ spec:
 
 Check for annotation section in [deployment of frontend v1](../ocp/frontend-v1-deployment.yml) that there is no **sidecar.istio.io/inject: "true"** in deployment file.
 
+You can annotate existing deployment with oc patch command
+
+```bash
+oc patch deployment/frontend-v1 -p '{"spec":{"template":{"metadata":{"annotations":{"sidecar.istio.io/inject":"true"}}}}}' -n $USERID
+```
 Review configuration of backend v1 and v2. 
 * Backend v1 is configured to call https://httpbin.org/status/200 
   ```yaml
