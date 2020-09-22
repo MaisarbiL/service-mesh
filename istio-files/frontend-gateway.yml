@@ -11,4 +11,4 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - '*'
+    - 'frontend.apps.cluster-ada4.ada4.example.opentlc.com'

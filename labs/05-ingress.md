@@ -8,6 +8,7 @@
   - [Routing by incoming HTTP header](#routing-by-incoming-http-header)
     - [Destination Rule](#destination-rule)
     - [Virtual Service](#virtual-service)
+    - [Route](#route)
     - [Test](#test)
   - [Fault Injection](#fault-injection)
   - [Test](#test-1)
@@ -50,10 +51,17 @@ frontend-v2-5c4bf794bd-vnjk6   0/2     ContainerCreating   0          13s
 
 Review the following Istio's Gateway rule configuration file [frontend-gateway.yml](../istio-files/frontend-gateway.yml)  to create Istio Gateway.
 
+Replace subdomain of FQDN specified in host to your subdomain (cluster-ada4.ada4.example.opentlc.com)
+
+```yaml
+    hosts:
+    - 'frontend.apps.cluster-ada4.ada4.example.opentlc.com'
+```
+
 Run oc apply command to create Istio Gateway.
 
 ```bash
-oc apply -f istio-files/frontend-gateway.yml -n $USERID
+oc apply -f istio-files/frontend-gateway.yml -n $USERID-istio-system
 ```
 
 Sample outout
@@ -98,6 +106,17 @@ Review the following Istio's  virtual service configuration file [virtual-servic
         host: frontend
         subset: v1
 ```
+Replace **hosts** and **gateways** with
+- hosts: same as hosts in gateway
+- gateways: with frontend-gateway.<Istio Control Plane Project>.svc.cluster.local  
+
+```yaml
+spec:
+  hosts:
+  - frontend.apps.cluster-ada4.ada4.example.opentlc.com
+  gateways:
+  - frontend-gateway.user1-istio-system.svc.cluster.local
+```
 
 Run oc apply command to apply Istio virtual service policy.
 
@@ -109,6 +128,43 @@ Sample output
 
 ```bash
 virtualservice.networking.istio.io/frontend created
+```
+### Route
+Review the following OpenShift's Route configuration file [frontend-route.yml](../istio-files/frontend-route.yml) that point to istio-ingressgateway.
+
+Notice that you need to change host to match with hosts in virtual service and gateway.
+
+```yaml
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  labels:
+    app: frontend
+  name: frontend
+spec:
+  # Change this
+  host: frontend.apps.cluster-ada4.ada4.example.opentlc.com
+  port:
+    targetPort: 8080
+  to:
+    kind: Service
+    name: istio-ingressgateway
+    weight: 100
+  wildcardPolicy: None
+status: {}
+```
+
+
+Run oc apply command to apply Istio virtual service policy.
+
+```bash
+oc apply -f istio-files/frontend-route.yml -n $USERID-istio-system
+```
+
+Sample output
+
+```bash
+route.route.openshift.io/frontend created
 ```
 <!-- ## Create Gateway using Kiali Console
 Login to the Kiali web console. Select "Services" on the left menu. Then select frontend service
@@ -129,7 +185,7 @@ Login to the Kiali web console. Select "Services" on the left menu. Then select 
 Get URL of Istio Gateway and set to environment variable by using following command
 
 ```bash
-export GATEWAY_URL=$(oc -n $USERID-istio-system get route istio-ingressgateway -o jsonpath='{.spec.host}')
+export GATEWAY_URL=$(oc -n $USERID-istio-system get route frontend -o jsonpath='{.spec.host}')
 ```
 
 Verify that environment variable GATEWAY is set correctly.
@@ -142,7 +198,7 @@ echo $GATEWAY_URL
 Sample output
 
 ```bash
-istio-ingressgateway-user1-istio-system.apps.cluster-bkk77-eeb3.bkk77-eeb3.example.opentlc.com
+frontend.apps.cluster-ada4.ada4.example.opentlc.com
 ```
 
 Test with cURL by setting header name foo with value bar. Response will always from Frontend v1
